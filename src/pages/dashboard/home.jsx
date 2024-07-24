@@ -16,15 +16,15 @@ import radiologicalIcon from "@/assets/radiological.png";
 import resultsIcon from "@/assets/results.png";
 
 function Home() {
-  const { statisticsCardsData, statisticsChartsData } = useHomeData();
+  const { statisticsCardsData, statisticsChartsData } = useHomeData(); 
 
   const boxes = [
-    { title: "Sonuçlarım", link: "/results", color: "bg-red-500", icon: <img src={resultsIcon} alt="results" className="w-12 h-12" /> },
-    { title: "Tahlillerim", link: "/assay", color: "bg-green-500", icon: <img src={assayIcon} alt="assay" className="w-12 h-12" /> },
-    { title: "Radyolojik Görüntülerim", link: "/radiological", color: "bg-blue-500", icon: <img src={radiologicalIcon} alt="radiological" className="w-12 h-12" /> },
-    { title: "Reçetelerim", link: "/page4", color: "bg-yellow-500", icon: <img src={prescriptionsIcon} alt="prescriptions" className="w-12 h-12" /> },
-    { title: "Ziyaretlerim", link: "/page5", color: "bg-purple-500", icon: <img src={hospitalIcon} alt="hospital" className="w-12 h-12" /> },
-    { title: "Aşı Takvimim/Alerjilerim", link: "/vaccineAllergy", color: "bg-teal-500", icon: <img src={vaccineIcon} alt="vaccine" className="w-12 h-12" /> },
+    { title: "Sonuçlarım", link: "/dashboard/results", color: "bg-red-500", icon: <img src={resultsIcon} alt="results" className="w-12 h-12" /> },
+    { title: "Tahlillerim", link: "/dashboard/assay", color: "bg-green-500", icon: <img src={assayIcon} alt="assay" className="w-12 h-12" /> },
+    { title: "Radyolojik Görüntülerim", link: "/dashboard/radiological", color: "bg-blue-500", icon: <img src={radiologicalIcon} alt="radiological" className="w-12 h-12" /> },
+    { title: "Reçetelerim", link: "/dashboard/prescriptions", color: "bg-yellow-900", icon: <img src={prescriptionsIcon} alt="prescriptions" className="w-12 h-12" /> },
+    { title: "Ziyaretlerim", link: "/dashboard/hospital", color: "bg-purple-500", icon: <img src={hospitalIcon} alt="hospital" className="w-12 h-12" /> },
+    { title: "Aşı Takvimim/Alerjilerim", link: "/dashboard/vaccineAllergy", color: "bg-teal-500", icon: <img src={vaccineIcon} alt="vaccine" className="w-12 h-12" /> },
   ];
 
   return (

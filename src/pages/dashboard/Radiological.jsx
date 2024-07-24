@@ -1,10 +1,9 @@
-
 import React from 'react';
 
 function Radiological() {
   return (
     <div>
-      <h1>Tahlillerin olduğu sayfa</h1>
+      <h1>Radyolojik Görüntülerim</h1>
     </div>
   );
 }

@@ -22,15 +22,14 @@ export function Sidenav({ brandImg, brandName, routes }) {
     <aside
       className={`${sidenavTypes[sidenavType]} ${
         openSidenav ? "translate-x-0" : "-translate-x-80"
-      } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100`}
+      } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-red-500`}
     >
-      <div
-        className={`relative`}
-      > 
-        <Link to="/" className="py-6 px-8 text-center">
+      <div className={`relative`}>
+        <Link to="/" className="py-6 px-8 text-center flex items-center justify-center gap-2">
+          <img src={brandImg} alt="Brand Logo" className="h-8 w-8" />
           <Typography
             variant="h6"
-            color={sidenavType === "dark" ? "white" : "blue-gray"}
+            color="red"
           >
             {brandName}
           </Typography>
@@ -53,8 +52,8 @@ export function Sidenav({ brandImg, brandName, routes }) {
               <li className="mx-3.5 mt-4 mb-2">
                 <Typography
                   variant="small"
-                  color={sidenavType === "dark" ? "white" : "blue-gray"}
-                  className="font-black uppercase opacity-75"
+                  color="darkblue"
+                  className="font-black uppercase opacity-75 text-xs"
                 >
                   {title}
                 </Typography>
@@ -71,15 +70,15 @@ export function Sidenav({ brandImg, brandName, routes }) {
                           ? sidenavColor
                           : sidenavType === "dark"
                           ? "white"
-                          : "blue-gray"
+                          : "darkblue"
                       }
-                      className="flex items-center gap-4 px-4 capitalize"
+                      className="flex items-center gap-4 px-4 capitalize text-sm"
                       fullWidth
                     >
                       {icon}
                       <Typography
                         color="inherit"
-                        className="font-medium capitalize"
+                        className="font-medium capitalize text-sm"
                       >
                         {name}
                       </Typography>
@@ -96,8 +95,8 @@ export function Sidenav({ brandImg, brandName, routes }) {
 }
 
 Sidenav.defaultProps = {
-  brandImg: "/img/logo-ct.png",
-  brandName: "Material Tailwind React",
+  brandImg: "/path/to/your/prescription-logo.png", // Update the path to your logo here
+  brandName: "e-Reçete/Kişisel Sağlık Sistemi",
 };
 
 Sidenav.propTypes = {
