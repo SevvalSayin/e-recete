@@ -210,13 +210,13 @@ const fakeData = [
     "evAdresi": "Denizli, Türkiye"
   },
   {
-    "tc": "57902468013",
+    "tc": "00000000000",
     "userId": 15,
-    "isim": "Özgür",
-    "soyisim": "Yıldız",
+    "isim": "Ante",
+    "soyisim": "Holding",
     "mail": "ozgur.yildiz@example.com",
-    "sifre": "hello123",
-    "yas": 43,
+    "sifre": "123456",
+    "yas": 29,
     "foto": "ozgur_yildiz.jpg",
     "kilo": 85,
     "boy": 174,

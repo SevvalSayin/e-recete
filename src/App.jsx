@@ -41,14 +41,14 @@ function App() {
 
 export default function AppWrapper() {
   return (
-   <UserProvider>
-      <VaccineProvider>
-        <MapProvider>
-          <HospitalDataProvider>
-            <App />
-          </HospitalDataProvider>
-        </MapProvider>
-      </VaccineProvider>
-    </UserProvider>
+    <UserProvider>
+    <VaccineProvider>
+      <MapProvider>
+        <HospitalDataProvider>
+          <App />
+        </HospitalDataProvider>
+      </MapProvider>
+    </VaccineProvider>
+  </UserProvider>
   );
 }
