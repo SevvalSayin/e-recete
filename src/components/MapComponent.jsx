@@ -12,7 +12,7 @@ function MapComponent({ hospitals }) {
       {hospitals.map((hospital, index) => (
         <Marker 
           key={index} 
-          position={[hospital.latitude, hospital.longitude]} 
+          position={[hospital.lat, hospital.lon]} 
         >
           <Popup>
             <b>{hospital.hospitalName}</b><br />

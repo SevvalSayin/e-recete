@@ -1,4 +1,6 @@
-import { HomeIcon, UserCircleIcon, TableCellsIcon, InformationCircleIcon, ServerStackIcon, RectangleStackIcon } from "@heroicons/react/24/solid";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faUserCircle, faStethoscope, faCapsules, faHospital, faSyringe,  faUserPlus,faVials,faCircleRadiation } from '@fortawesome/free-solid-svg-icons';
+
 import { Home, Profile } from "@/pages/dashboard";
 import { SignIn, SignUp, SignUpdate } from "@/pages/auth";
 import Results from "@/pages/dashboard/Results";
@@ -15,80 +17,80 @@ export const routes = [
     layout: "dashboard",
     pages: [
       {
-        icon: <HomeIcon {...icon} />,
+        icon: <FontAwesomeIcon icon={faHome} {...icon} />,
         name: "Anasayfa",
         path: "/home",
         element: <Home />,
       },
       {
-        icon: <UserCircleIcon {...icon} />,
+        icon: <FontAwesomeIcon icon={faUserCircle} {...icon} />,
         name: "Profil",
         path: "/profile",
         element: <Profile />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <FontAwesomeIcon icon={faStethoscope} {...icon} />,
         name: "Sonuçlarım",
         path: "/results",
         element: <Results />, 
       },
       {
-        icon: <InformationCircleIcon {...icon} />,
+        icon: <FontAwesomeIcon icon={faVials} {...icon} />,
         name: "Tahlillerim",
         path: "/assay",
         element: <Assay />,
       },
       {
-        icon: <InformationCircleIcon {...icon} />, 
+        icon: <FontAwesomeIcon icon={faCircleRadiation} {...icon} />, 
         name: "Radyolojik Görüntülerim",
         path: "/radiological",
         element: <Radiological/>,
       },
       {
-        icon: <InformationCircleIcon {...icon} />, 
+        icon: <FontAwesomeIcon icon={faCapsules} {...icon} />, 
         name: "Reçetelerim",
         path: "/prescriptions",
         element: <Prescriptions/>,
       },
       {
-        icon: <InformationCircleIcon {...icon} />, 
+        icon: <FontAwesomeIcon icon={faHospital} {...icon} />, 
         name: "Ziyaretlerim",
         path: "/hospital",
         element: <Hospital/>,
       },
       {
-        icon: <InformationCircleIcon {...icon} />, 
+        icon: <FontAwesomeIcon icon={faSyringe} {...icon} />, 
         name: "Aşı Takvimim/Alerjilerim",
         path: "/vaccineAllergy",
         element: <VaccineAllergy/>,
       },
-      
     ],
   },
   {
-    title: "auth pages",
+    /* title: "auth pages", */
     layout: "auth",
     pages: [
       {
-        icon: <ServerStackIcon {...icon} />,
-        name: "sign in",
+        icon: <FontAwesomeIcon icon={faUserPlus} {...icon} />,
+        name: "Giriş Yap",
         path: "/sign-in",
         element: <SignIn />,
       },
       {
-        icon: <RectangleStackIcon {...icon} />,
-        name: "sign up",
+        icon: <FontAwesomeIcon icon={faUserPlus} {...icon} />,
+        name: "Şifre Güncelle",
         path: "/sign-up",
         element: <SignUp />,
       },
-      {
-        icon: <RectangleStackIcon {...icon} />,
-        name: "sign update",
+     /*  {
+        icon: <FontAwesomeIcon icon={faUserPlus} {...icon} />,
+        name: "Şifre Güncelle",
         path: "/sign-update",
         element: <SignUpdate />, 
-      },
+      }, */
     ],
   },
 ];
 
 export default routes;
+

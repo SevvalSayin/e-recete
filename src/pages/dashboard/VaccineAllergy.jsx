@@ -29,10 +29,10 @@ function VaccineAllergy() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-50 py-8 space-y-12">
       <div className="w-full max-w-6xl bg-white shadow-lg rounded-3xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-teal-600">Aşı Takvimi ve Alerjiler</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-red-500">Aşı Takvimi ve Alerjiler</h1>
         <div className="overflow-x-auto">
           <table {...getTableProps()} className="min-w-full bg-white rounded-lg">
-            <thead className="bg-teal-600 text-white text-sm">
+            <thead className="bg-red-500 text-white text-sm">
               {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map(column => (

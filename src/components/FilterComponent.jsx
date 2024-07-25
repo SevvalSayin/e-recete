@@ -16,7 +16,7 @@ const FilterComponent = ({ provinces, districts, onFilter }) => {
   };
 
   return (
-    <div className="p-4 border border-gray-300 rounded-md shadow-md">
+    <div className="p-4 border border-red-500 rounded-md shadow-md">
       <table className="w-full">
         <tbody>
           <tr>

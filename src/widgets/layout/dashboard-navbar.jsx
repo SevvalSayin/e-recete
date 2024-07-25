@@ -1,10 +1,19 @@
-import { useLocation } from "react-router-dom";
-import { Navbar, Typography, Input, IconButton } from "@material-tailwind/react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Navbar, Typography, Input, IconButton, Button } from "@material-tailwind/react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
+import { useUser } from '@/context/UserContext';
 
 export function DashboardNavbar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { setUser } = useUser(); 
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
+
+  const handleLogout = () => {
+    setUser(null); 
+    localStorage.removeItem("userToken"); 
+    navigate("/auth/sign-in");
+  };
 
   return (
     <Navbar
@@ -27,14 +36,22 @@ export function DashboardNavbar() {
             <Input
               label="Search"
               className="w-full"
-              style={{ width: '100%' }} // Ensure the input takes up the full width of its container
+              style={{ width: '100%' }} 
             />
           </div>
         </div>
-        <div className="capitalize">
-          <Typography variant="h6" color="blue-gray">
+        <div className="flex items-center space-x-4">
+          <Typography variant="h6" color="blue-gray" className="capitalize">
             {page}
           </Typography>
+          <Button
+            variant="gradient"
+            color="red"
+            size="sm"
+            onClick={handleLogout}
+          >
+            Çıkış Yap
+          </Button>
         </div>
       </div>
     </Navbar>

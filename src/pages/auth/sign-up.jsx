@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import fakeData from '@/data/fake-data';
 
@@ -17,18 +11,17 @@ export function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const user = fakeData.find((user) => user.mail === email);
     setLoading(true); // Set loading state to true while checking
-    
+
     if (user) {
       setMessage('Onay maili gönderildi. Lütfen emailinizi kontrol edin.');
       // Simulate sending email confirmation and redirect after 3 seconds
-      setTimeout(() => navigate('/update-password'), 3000);
+      setTimeout(() => navigate('/auth/sign-update'), 3000);
     } else {
       setMessage('Email bulunamadı. Lütfen geçerli bir email girin.');
     }
-    
+
     setLoading(false); // Reset loading state
   };
 
@@ -39,10 +32,10 @@ export function SignUp() {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="m-8 flex items-center">
-        <div className="w-2/5 h-full hidden lg:block">
+        <div className="w-2/5 h-full hidden lg:block relative">
           <img
-            src="https://lh3.googleusercontent.com/proxy/sQc5gQtcgznkJGuQP53nIAJIWVOOY9U7XZOTGHE9HdOpq3seTPrF3G7vS1ar-S45JMwkwIim1iRIIfRliDQnXPFYmOzLgMO--cj6AXZ3sS4vdSI7ml9dKxBGIdChTtY-Ncr_tTQJWJAqZFn9nn5DSgUh68Ij1RROb7Q"
-            className="h-full w-full object-cover rounded-3xl"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHhZ1im9J2mvE9SdPSb296n3fQr5VEtpDgaA&s"
+            className="h-full w-full object-cover rounded-3xl transition-transform duration-300 transform hover:scale-110"
             alt="Kurumsal Kimlik"
           />
         </div>

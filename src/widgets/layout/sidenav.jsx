@@ -95,7 +95,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
 }
 
 Sidenav.defaultProps = {
-  brandImg: "/path/to/your/prescription-logo.png", // Update the path to your logo here
+  brandImg: "/path/to/your/prescription-logo.png", 
   brandName: "e-Reçete/Kişisel Sağlık Sistemi",
 };
 
