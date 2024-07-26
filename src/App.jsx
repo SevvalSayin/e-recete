@@ -8,7 +8,7 @@ import { HospitalDataProvider } from '@/context/HospitalContext';
 import { Dashboard } from '@/layouts';
 import SignIn from '@/pages/auth/sign-in';
 import SignUp from '@/pages/auth/sign-up';
-import Register from '@/pages/auth/register'; // Register bileşenini ekleyin
+import Register from '@/pages/auth/Register'; 
 import SignUpdate from '@/pages/auth/sign-update';
 import Profile from '@/pages/dashboard/profile';
 import { useUser } from '@/context/UserContext';
