@@ -1,6 +1,7 @@
+// src/pages/SignIn.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '@/context/UserContext';  // Ensure this is correct
+import { useUser } from '@/context/UserContext';
 import fakeData from '@/data/fake-data';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
@@ -10,14 +11,14 @@ function SignIn() {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useUser();  // Ensure this matches the export
+  const { setUser } = useUser();
 
   const handleSignIn = (e) => {
     e.preventDefault();
     const user = fakeData.find((user) => user.tc === tc && user.sifre === password);
     if (user) {
       setUser(user);
-      navigate('/dashboard/home'); // Update the path to the correct route
+      navigate('/dashboard/home');
     } else {
       setErrorMessage('T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
     }
@@ -70,10 +71,10 @@ function SignIn() {
               )}
               <Typography color="gray" className="mt-4 text-center font-normal">
                 <Link
-                  to="/auth/sign-up"
+                  to="/auth/register"
                   className="font-medium text-gray-500 transition-colors hover:text-black"
                 >
-                  Şifreni mi unuttun?
+                  Kayıt Ol
                 </Link>
               </Typography>
             </form>

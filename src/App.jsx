@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { UserProvider } from '@/context/UserContext';
@@ -7,6 +8,7 @@ import { HospitalDataProvider } from '@/context/HospitalContext';
 import { Dashboard } from '@/layouts';
 import SignIn from '@/pages/auth/sign-in';
 import SignUp from '@/pages/auth/sign-up';
+import Register from '@/pages/auth/register'; // Register bileşenini ekleyin
 import SignUpdate from '@/pages/auth/sign-update';
 import Profile from '@/pages/dashboard/profile';
 import { useUser } from '@/context/UserContext';
@@ -27,11 +29,11 @@ function App() {
       <Route path="/auth/sign-in" element={!user ? <SignIn /> : <Navigate to="/dashboard/home" />} />
       <Route path="/auth/sign-up" element={!user ? <SignUp /> : <Navigate to="/auth/sign-in" />} />
       <Route path="/auth/sign-update" element={user ? <SignUpdate /> : <Navigate to="/auth/sign-in" />} />
+      <Route path="/auth/register" element={<Register />} /> {/* Doğru bileşen burada yer alıyor */}
       <Route path="/profile" element={user ? <Profile /> : <Navigate to="/auth/sign-in" />} />
-     
       <Route path="/vaccineAllergy" element={user ? <VaccineAllergy /> : <Navigate to="/dashboard/home" />} />
       <Route path="/results" element={user ? <Results /> : <Navigate to="/dashboard/home" />} />
-      <Route path="/hospital" element={user ? <Hospital/> : <Navigate to="/dashboard/home" />} />
+      <Route path="/hospital" element={user ? <Hospital /> : <Navigate to="/dashboard/home" />} />
       <Route path="/prescriptions" element={user ? <Prescriptions /> : <Navigate to="/dashboard/home" />} />
       <Route path="/assay" element={user ? <Assay /> : <Navigate to="/dashboard/home" />} />
       <Route path="/" element={<Navigate to="/auth/sign-in" />} />
@@ -42,13 +44,13 @@ function App() {
 export default function AppWrapper() {
   return (
     <UserProvider>
-    <VaccineProvider>
-      <MapProvider>
-        <HospitalDataProvider>
-          <App />
-        </HospitalDataProvider>
-      </MapProvider>
-    </VaccineProvider>
-  </UserProvider>
+      <VaccineProvider>
+        <MapProvider>
+          <HospitalDataProvider>
+            <App />
+          </HospitalDataProvider>
+        </MapProvider>
+      </VaccineProvider>
+    </UserProvider>
   );
 }

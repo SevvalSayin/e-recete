@@ -19,7 +19,7 @@ function Home() {
   const { statisticsCardsData, statisticsChartsData } = useHomeData(); 
 
   const boxes = [
-    { title: "Sonuçla", link: "/dashboard/results", color: "bg-red-500", icon: <img src={resultsIcon} alt="results" className="w-12 h-12" /> },
+    { title: "Sonuçlarım", link: "/dashboard/results", color: "bg-red-500", icon: <img src={resultsIcon} alt="results" className="w-12 h-12" /> },
     { title: "Tahlillerim", link: "/dashboard/assay", color: "bg-green-500", icon: <img src={assayIcon} alt="assay" className="w-12 h-12" /> },
     { title: "Radyolojik Görüntülerim", link: "/dashboard/radiological", color: "bg-blue-500", icon: <img src={radiologicalIcon} alt="radiological" className="w-12 h-12" /> },
     { title: "Reçetelerim", link: "/dashboard/prescriptions", color: "bg-yellow-900", icon: <img src={prescriptionsIcon} alt="prescriptions" className="w-12 h-12" /> },
