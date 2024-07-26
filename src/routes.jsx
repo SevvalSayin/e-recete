@@ -4,10 +4,10 @@ import { faHome, faUserCircle, faStethoscope, faCapsules, faHospital, faSyringe,
 import { Home, Profile } from "@/pages/dashboard";
 import { SignIn, SignUp, SignUpdate } from "@/pages/auth";
 import Results from "@/pages/dashboard/Results";
-import Assay from "./pages/dashboard/Assay";
-import Radiological from "./pages/dashboard/Radiological";
-import Prescriptions from "./pages/dashboard/Prescriptions";
-import Hospital from "./pages/dashboard/Hospital";
+import Assay from "@/pages/dashboard/Assay";
+import Radiological from "@/pages/dashboard/Radiological";
+import Prescriptions from "@/pages/dashboard/Prescriptions";
+import Hospital from "@/pages/dashboard/Hospital";
 import VaccineAllergy from "@/pages/dashboard/VaccineAllergy";
 
 const icon = { className: "w-5 h-5 text-inherit" };
