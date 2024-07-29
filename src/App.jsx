@@ -18,7 +18,7 @@ import Assay from '@/pages/dashboard/Assay';
 import Radiological from '@/pages/dashboard/Radiological';
 import Prescriptions from '@/pages/dashboard/Prescriptions';
 import Hospital from '@/pages/dashboard/Hospital';
-
+import './styles.css';
 function App() {
   const { user } = useUser();
 

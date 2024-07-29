@@ -1,0 +1,51 @@
+/* Genel stiller */
+.container {
+    padding: 20px;
+    font-size: 16px;
+  }
+  
+  /* Küçük telefonlar ve bazı eski tabletler (480px - 767px) */
+  @media (min-width: 480px) and (max-width: 767px) {
+    .container {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  /* Tabletler ve küçük dizüstü bilgisayarlar (768px - 1024px) */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+      padding: 20px;
+      font-size: 16px;
+    }
+  }
+  
+  /* Standart dizüstü bilgisayar ekranları (1024px - 1280px) */
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    .container {
+      padding: 30px;
+      font-size: 18px;
+    }
+  }
+  
+  /* Çoğu masaüstü bilgisayar monitörü (1280px - 1920px) */
+  @media (min-width: 1280px) and (max-width: 1920px) {
+    .container {
+      padding: 40px;
+      font-size: 20px;
+    }
+  }
+  
+  /* Büyük ekranlı monitörler ve 4K ekranlar (> 1920px) */
+  @media (min-width: 1920px) {
+    .container {
+      padding: 50px;
+      font-size: 22px;
+    }
+  }
+  
+  .box {
+    width: 100%;
+    max-width: 300px; /* Eski genişlik değeriniz */
+    min-height: 200px; /* Eski yükseklik değeriniz */
+  }

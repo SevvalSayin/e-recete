@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Typography
-} from '@material-tailwind/react';
+import { Typography } from '@material-tailwind/react';
 import { StatisticsCard } from '@/widgets/cards';
 import { StatisticsChart } from '@/widgets/charts';
 import { useHomeData } from '@/context/HomeDataContext';
@@ -12,9 +10,10 @@ import hospitalIcon from "@/assets/hospital.png";
 import prescriptionsIcon from "@/assets/prescriptions.png";
 import radiologicalIcon from "@/assets/radiological.png";
 import resultsIcon from "@/assets/results.png";
+import '../../styles.css';
 
 function Home() {
-  const { statisticsCardsData, statisticsChartsData } = useHomeData(); 
+  const { statisticsCardsData, statisticsChartsData } = useHomeData();
 
   const boxes = [
     { title: "Sonuçlarım", link: "/dashboard/results", color: "bg-red-500", icon: <img src={resultsIcon} alt="results" className="w-12 h-12" /> },
@@ -26,7 +25,7 @@ function Home() {
   ];
 
   return (
-    <div className="mt-12">
+    <div className="container mt-12">
       <div className="mb-12 grid gap-y-4 gap-x-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
         {statisticsCardsData.map(({ icon, title, footer, link, ...rest }, index) => (
           <Link key={title} to={`/hospital/${index}`}>
@@ -49,8 +48,7 @@ function Home() {
         {boxes.map(({ title, link, color, icon }, index) => (
           <Link key={index} to={link} className="block">
             <div
-              className={`${color} text-white text-center p-4 rounded-lg shadow hover:bg-opacity-80 transition duration-300 flex items-center justify-center`}
-              style={{ width: '100%', maxWidth: '300px', minHeight: '200px' }} // Adjusted size
+              className={`${color} box text-white text-center rounded-lg shadow hover:bg-opacity-80 transition duration-300 flex items-center justify-center`}
             >
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="mb-4">
