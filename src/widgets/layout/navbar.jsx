@@ -9,16 +9,24 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 
 export function Navbar({ brandName, routes, action }) {
+  const [controller, dispatch] = useMaterialTailwindController();
+  const { openSidenav } = controller;
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setOpenNav(false)
-    );
-  }, []);
+    const handleResize = () => {
+      if (window.innerWidth >= 960) {
+        setOpenNav(false);
+        setOpenSidenav(dispatch, false); // Ensure sidenav is closed on resize
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [dispatch]);
 
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -61,7 +69,10 @@ export function Navbar({ brandName, routes, action }) {
           variant="text"
           size="sm"
           className="ml-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-          onClick={() => setOpenNav(!openNav)}
+          onClick={() => {
+            setOpenNav(!openNav);
+            setOpenSidenav(dispatch, !openSidenav); // Toggle sidenav visibility
+          }}
         >
           {openNav ? (
             <XMarkIcon strokeWidth={2} className="h-6 w-6" />

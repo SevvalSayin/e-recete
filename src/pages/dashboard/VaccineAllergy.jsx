@@ -18,7 +18,6 @@ const columns = [
   { Header: 'MenACWY', accessor: 'menACWY' },
   { Header: 'MenB', accessor: 'menB' },
   { Header: 'Hib', accessor: 'hib' },
-  
 ];
 
 function VaccineAllergy() {
@@ -28,28 +27,36 @@ function VaccineAllergy() {
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-50 py-8 space-y-12">
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-3xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-red-500">Aşı Takvimi ve Alerjiler</h1>
+      <div className="w-full max-w-6xl bg-white shadow-lg rounded-3xl p-4 sm:p-6 lg:p-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-red-500">
+          Aşı Takvimi ve Alerjiler
+        </h1>
         <div className="overflow-x-auto">
           <table {...getTableProps()} className="min-w-full bg-white rounded-lg">
-            <thead className="bg-red-500 text-white text-sm">
+            <thead className="bg-red-500 text-white text-xs sm:text-sm">
               {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()} className="text-left px-6 py-3 font-semibold">
+                    <th
+                      {...column.getHeaderProps()}
+                      className="text-left px-2 py-1 sm:px-4 sm:py-2 lg:px-6 lg:py-3 font-semibold"
+                    >
                       {column.render('Header')}
                     </th>
                   ))}
                 </tr>
               ))}
             </thead>
-            <tbody {...getTableBodyProps()} className="text-sm text-gray-700">
+            <tbody {...getTableBodyProps()} className="text-xs sm:text-sm text-gray-700">
               {rows.map(row => {
                 prepareRow(row);
                 return (
                   <tr {...row.getRowProps()} className="border-t hover:bg-gray-200">
                     {row.cells.map(cell => (
-                      <td {...cell.getCellProps()} className="px-6 py-2 whitespace-nowrap">
+                      <td
+                        {...cell.getCellProps()}
+                        className="px-2 py-1 sm:px-4 sm:py-2 lg:px-6 lg:py-3 whitespace-nowrap"
+                      >
                         {cell.render('Cell')}
                       </td>
                     ))}

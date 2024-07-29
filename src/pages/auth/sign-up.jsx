@@ -1,3 +1,4 @@
+// src/pages/SignUp.jsx
 import React, { useState } from 'react';
 import { Card, Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,9 +12,9 @@ export function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = fakeData.find((user) => user.mail === email);
     setLoading(true); // Set loading state to true while checking
 
+    const user = fakeData.find((user) => user.mail === email);
     if (user) {
       setMessage('Onay maili gönderildi. Lütfen emailinizi kontrol edin.');
       // Simulate sending email confirmation and redirect after 3 seconds
@@ -30,7 +31,7 @@ export function SignUp() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="m-8 flex items-center">
         <div className="w-2/5 h-full hidden lg:block relative">
           <img
@@ -41,8 +42,8 @@ export function SignUp() {
         </div>
         <div className="w-full lg:w-3/5 flex flex-col items-center justify-center">
           <div className="text-center">
-            <Card color="transparent" shadow={false}>
-              <Typography variant="h2" color="red" className="font-bold mb-4 italic">
+            <Card color="transparent" shadow={false} className="text-center p-6 bg-white rounded-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-lg">
+              <Typography variant="h5" color="red" className="font-bold mb-4 italic text-2xl">
                 e-Reçete
               </Typography>
               <Typography variant="paragraph" color="red" className="text-lg font-normal italic">
@@ -60,6 +61,7 @@ export function SignUp() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    type="email"
                   />
                 </div>
                 <Checkbox
@@ -72,7 +74,7 @@ export function SignUp() {
                       Katılıyorum&nbsp;
                       <a
                         href="#"
-                        className="font-normal text-black transition-colors hover:text-gray-900 underline"
+                        className="font-normal text-gray-600 transition-colors hover:text-gray-900 underline"
                       >
                         Şartlar ve Koşullar
                       </a>
@@ -82,8 +84,7 @@ export function SignUp() {
                   required
                 />
                 <Button
-                  className="transform translate-y-5 mb-2 w-80 max-w-screen-lg sm:w-96"
-                  color="white"
+                  className="transform translate-y-5 mb-2 w-80 max-w-screen-lg sm:w-96 bg-red-500 text-white hover:bg-red-600"
                   fullWidth
                   type="submit"
                   disabled={loading}
@@ -93,8 +94,7 @@ export function SignUp() {
                 <div className="space-y-4 mt-8">
                   <Button
                     size="lg"
-                    color="white"
-                    className="flex items-center gap-2 justify-center shadow-md"
+                    className="flex items-center gap-2 justify-center shadow-md bg-red-500 text-white hover:bg-red-600"
                     fullWidth
                     onClick={handleEdevletLogin}
                   >
@@ -103,10 +103,10 @@ export function SignUp() {
                 </div>
                 <Typography
                   variant="paragraph"
-                  className="text-center text-blue-gray-500 font-medium mt-4"
+                  className="text-center text-gray-500 font-medium mt-4"
                 >
                   Zaten hesabınız var mı?
-                  <Link to="/auth/sign-in" className="text-gray-900 ml-1">
+                  <Link to="/auth/sign-in" className="text-red-500 hover:text-red-600 ml-1">
                     Oturum aç
                   </Link>
                 </Typography>

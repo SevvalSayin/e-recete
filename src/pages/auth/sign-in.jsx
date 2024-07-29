@@ -1,4 +1,3 @@
-// src/pages/SignIn.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
@@ -15,6 +14,14 @@ function SignIn() {
 
   const handleSignIn = (e) => {
     e.preventDefault();
+    // Regular expression for exactly 11 digits
+    const tcPattern = /^\d{11}$/;
+
+    if (!tcPattern.test(tc)) {
+      setErrorMessage('T.C. Kimlik Numaranız 11 haneli olmalıdır.');
+      return;
+    }
+
     const user = fakeData.find((user) => user.tc === tc && user.sifre === password);
     if (user) {
       setUser(user);
@@ -35,8 +42,12 @@ function SignIn() {
           />
         </div>
         <div className="w-full lg:w-3/5 flex flex-col items-center justify-center">
-          <Card color="transparent" shadow={false} className="text-center p-6 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-lg">
-            <Typography variant="h5" color="red" className="font-bold mb-4 italic">
+          <Card
+            color="transparent"
+            shadow={false}
+            className="text-center p-6 bg-white rounded-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-lg"
+          >
+            <Typography variant="h5" color="red" className="font-bold mb-4 italic text-2xl">
               e-Reçete
             </Typography>
             <Typography variant="paragraph" color="red" className="text-lg font-normal italic">
@@ -51,6 +62,8 @@ function SignIn() {
                   value={tc}
                   onChange={(e) => setTc(e.target.value)}
                   required
+                  pattern="\d{11}"
+                  title="T.C. Kimlik Numaranız 11 haneli olmalıdır."
                 />
                 <Input
                   type="password"
@@ -61,20 +74,32 @@ function SignIn() {
                   required
                 />
               </div>
-              <Button className="transform translate-y-5 mb-2 w-80 max-w-screen-lg sm:w-96" color="white" type="submit">
+              <Button
+                className="transform translate-y-5 mb-2 w-80 max-w-screen-lg sm:w-96 bg-red-500 text-white hover:bg-red-600"
+                type="submit"
+              >
                 Giriş Yap
               </Button>
               {errorMessage && (
-                <Typography color="red" className="mt-4 text-center">
+                <Typography color="red" className="mt-4 text-center text-lg">
                   {errorMessage}
                 </Typography>
               )}
-              <Typography color="gray" className="mt-4 text-center font-normal">
+              <Typography color="gray" className="mt-4 text-center font-normal text-lg">
                 <Link
                   to="/auth/register"
-                  className="font-medium text-gray-500 transition-colors hover:text-black"
+                  className="font-thin text-gray-500 transition-colors hover:text-gray-500"
                 >
-                  Kayıt Ol
+                  Hesabınız yok mu? Kayıt Ol
+                </Link>
+              </Typography>
+              <Typography color="gray" className="mt-4 text-center font-normal text-lg">
+                <Link to="/auth/sign-up">
+                  <Button
+                    className="mt-4 bg-red-500 text-white hover:bg-red-600"
+                  >
+                    Şifreni mi unuttun?
+                  </Button>
                 </Link>
               </Typography>
             </form>

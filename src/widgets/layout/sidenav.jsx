@@ -12,6 +12,7 @@ import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavColor, sidenavType, openSidenav } = controller;
+
   const sidenavTypes = {
     dark: "bg-gradient-to-br from-gray-800 to-gray-900",
     white: "bg-white shadow-sm",
@@ -21,10 +22,10 @@ export function Sidenav({ brandImg, brandName, routes }) {
   return (
     <aside
       className={`${sidenavTypes[sidenavType]} ${
-        openSidenav ? "translate-x-0" : "-translate-x-80"
-      } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-red-500`}
+        openSidenav ? "translate-x-0" : "-translate-x-full"
+      } fixed inset-0 z-50 h-screen w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-red-500`}
     >
-      <div className={`relative`}>
+      <div className="relative">
         <Link to="/" className="py-6 px-8 text-center flex items-center justify-center gap-2">
           <img src={brandImg} alt="Brand Logo" className="h-8 w-8" />
           <Typography
@@ -105,6 +106,6 @@ Sidenav.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-Sidenav.displayName = "/src/widgets/layout/sidnave.jsx";
+Sidenav.displayName = "/src/widgets/layout/sidenav.jsx";
 
 export default Sidenav;

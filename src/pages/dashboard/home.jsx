@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Typography, Card, CardHeader, CardBody, IconButton, Menu,
-  MenuHandler, MenuList, MenuItem, Avatar, Tooltip, Progress
+  Typography
 } from '@material-tailwind/react';
-import { EllipsisVerticalIcon, ArrowUpIcon, CheckCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { StatisticsCard } from '@/widgets/cards';
 import { StatisticsChart } from '@/widgets/charts';
 import { useHomeData } from '@/context/HomeDataContext';
@@ -29,7 +27,7 @@ function Home() {
 
   return (
     <div className="mt-12">
-      <div className="mb-12 grid gap-y-6 gap-x-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-12 grid gap-y-4 gap-x-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
         {statisticsCardsData.map(({ icon, title, footer, link, ...rest }, index) => (
           <Link key={title} to={`/hospital/${index}`}>
             <StatisticsCard
@@ -47,25 +45,25 @@ function Home() {
         ))}
       </div>
 
-      <div className="mb-12 grid gap-y-4 gap-x-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mb-12 grid gap-y-4 gap-x-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
         {boxes.map(({ title, link, color, icon }, index) => (
           <Link key={index} to={link} className="block">
             <div
               className={`${color} text-white text-center p-4 rounded-lg shadow hover:bg-opacity-80 transition duration-300 flex items-center justify-center`}
-              style={{ width: '100%', maxWidth: '250px', height: '250px' }}
+              style={{ width: '100%', maxWidth: '300px', minHeight: '200px' }} // Adjusted size
             >
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="mb-4">
                   {icon}
                 </div>
-                <span className="text-lg font-semibold">{title}</span>
+                <span className="text-base md:text-lg lg:text-xl font-semibold">{title}</span>
               </div>
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-y-8 gap-x-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mb-6 grid grid-cols-1 gap-y-8 gap-x-4 md:grid-cols-2 lg:grid-cols-3">
         {statisticsChartsData.map((props) => (
           <StatisticsChart
             key={props.title}

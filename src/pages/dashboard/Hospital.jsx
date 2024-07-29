@@ -29,8 +29,8 @@ function Hospital() {
 
   return (
     <div className="flex flex-col min-h-screen p-4">
-      <div className="flex flex-row space-x-4">
-        <div className="flex-none w-72">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <div className="flex-none w-full md:w-72">
           <FilterComponent
             provinces={provinces}
             districts={districts}
@@ -39,7 +39,7 @@ function Hospital() {
         </div>
 
         <div className="flex-grow relative">
-          <div className="w-full h-96 border border-red-500 rounded-md bg-white shadow-md">
+          <div className="w-full h-80 md:h-96 border border-red-500 rounded-md bg-white shadow-md">
             <MapComponent hospitals={filteredHospitals} />
           </div>
         </div>
@@ -52,20 +52,20 @@ function Hospital() {
         </div>
       )}
 
-<div className="mt-4 p-4 bg-gray-100 border border-red-500 rounded-md">
-  <h2 className="text-lg font-semibold">Geçmiş Randevularım:</h2>
-  {hospitalData.length > 0 && (
-    <div className="mt-4 p-4 bg-gray-100 border border-red-500 rounded-md">
-      <h1 className="text-base font-semibold mb-6">{hospitalData[0].hospitalName}</h1>
-      <p className="mt-1 text-sm" style={{ color: "#a1a1a1" }}>Klinik Adı</p>
-      <p className="mt-1 text-sm" style={{ color: "#a1a1a1" }}>{hospitalData[0].clinicName}</p>
-      <p className="text-base font-semibold" style={{ color: "#a1a1a1" }}>Hekim Adı</p>
-      <p className="mt-1 text-sm" style={{ color: "#a1a1a1" }}>{hospitalData[0].physicianName}</p>
-      <p className="text-base font-semibold" style={{ color: "#a1a1a1" }}>Son Ziyaret Tarihi</p>
-      <p className="mt-1 text-sm" style={{ color: "#a1a1a1" }}>{hospitalData[0].lastVisitDate}</p>
-    </div>
-  )}
-</div>
+      <div className="mt-4 p-4 bg-gray-100 border border-red-500 rounded-md">
+        <h2 className="text-lg font-semibold">Geçmiş Randevularım:</h2>
+        {hospitalData.length > 0 && (
+          <div className="mt-4 p-4 bg-gray-100 border border-red-500 rounded-md">
+            <h1 className="text-base font-semibold mb-6">{hospitalData[0].hospitalName}</h1>
+            <p className="mt-1 text-sm text-gray-600">Klinik Adı</p>
+            <p className="mt-1 text-sm text-gray-600">{hospitalData[0].clinicName}</p>
+            <p className="text-base font-semibold text-gray-600">Hekim Adı</p>
+            <p className="mt-1 text-sm text-gray-600">{hospitalData[0].physicianName}</p>
+            <p className="text-base font-semibold text-gray-600">Son Ziyaret Tarihi</p>
+            <p className="mt-1 text-sm text-gray-600">{hospitalData[0].lastVisitDate}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

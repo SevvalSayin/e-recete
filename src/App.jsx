@@ -28,8 +28,8 @@ function App() {
       <Route path="/dashboard/*" element={user ? <Dashboard /> : <Navigate to="/auth/sign-in" />} />
       <Route path="/auth/sign-in" element={!user ? <SignIn /> : <Navigate to="/dashboard/home" />} />
       <Route path="/auth/sign-up" element={!user ? <SignUp /> : <Navigate to="/auth/sign-in" />} />
-      <Route path="/auth/sign-update" element={user ? <SignUpdate /> : <Navigate to="/auth/sign-in" />} />
-      <Route path="/auth/register" element={<Register />} /> {/* Doğru bileşen burada yer alıyor */}
+      <Route path="/auth/sign-update" element={<SignUpdate />} />
+      <Route path="/auth/register" element={<Register />} />
       <Route path="/profile" element={user ? <Profile /> : <Navigate to="/auth/sign-in" />} />
       <Route path="/vaccineAllergy" element={user ? <VaccineAllergy /> : <Navigate to="/dashboard/home" />} />
       <Route path="/results" element={user ? <Results /> : <Navigate to="/dashboard/home" />} />
