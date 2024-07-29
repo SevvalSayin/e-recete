@@ -2,13 +2,26 @@
 .container {
     padding: 20px;
     font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   /* Küçük telefonlar ve bazı eski tabletler (480px - 767px) */
-  @media (min-width: 480px) and (max-width: 767px) {
+  @media (max-width: 767px) {
     .container {
       padding: 10px;
       font-size: 14px;
+    }
+    
+    .box {
+      width: 100%;
+      max-width: 100%; /* Ekran boyutuna göre tam genişlik */
+      min-height: auto; /* Yükseklik sınırlaması kaldırıldı */
+    }
+    
+    .grid-cols-1 {
+      grid-template-columns: repeat(1, 1fr);
     }
   }
   
@@ -18,6 +31,16 @@
       padding: 20px;
       font-size: 16px;
     }
+    
+    .box {
+      width: 100%;
+      max-width: 300px; /* Orijinal genişlik */
+      min-height: 200px; /* Orijinal yükseklik */
+    }
+    
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   
   /* Standart dizüstü bilgisayar ekranları (1024px - 1280px) */
@@ -25,6 +48,16 @@
     .container {
       padding: 30px;
       font-size: 18px;
+    }
+    
+    .box {
+      width: 100%;
+      max-width: 300px; /* Orijinal genişlik */
+      min-height: 200px; /* Orijinal yükseklik */
+    }
+    
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
   
@@ -34,6 +67,12 @@
       padding: 40px;
       font-size: 20px;
     }
+    
+    .box {
+      width: 100%;
+      max-width: 300px; /* Orijinal genişlik */
+      min-height: 200px; /* Orijinal yükseklik */
+    }
   }
   
   /* Büyük ekranlı monitörler ve 4K ekranlar (> 1920px) */
@@ -42,10 +81,33 @@
       padding: 50px;
       font-size: 22px;
     }
+    
+    .box {
+      width: 100%;
+      max-width: 300px; /* Orijinal genişlik */
+      min-height: 200px; /* Orijinal yükseklik */
+    }
+  }
+  /* Ensure the map container remains square on mobile screens */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
   }
   
-  .box {
+  .map-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 300px; /* Eski genişlik değeriniz */
-    min-height: 200px; /* Eski yükseklik değeriniz */
+    height: 100%;
   }
+  
+  /* Update the dimensions for larger screens */
+  @media (min-width: 768px) {
+    .map-container {
+      padding-bottom: 75%; /* Adjust for 4:3 Aspect Ratio or as needed */
+    }
+  }
+  
