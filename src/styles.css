@@ -70,7 +70,7 @@
     
     .box {
       width: 100%;
-      max-width: 300px; /* Orijinal genişlik */
+      max-width: 300px;
       min-height: 200px; /* Orijinal yükseklik */
     }
   }

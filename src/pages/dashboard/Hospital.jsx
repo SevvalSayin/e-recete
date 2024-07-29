@@ -24,7 +24,7 @@ function Hospital() {
       filtered = filtered.filter(hospital => hospital.district === district);
     }
     setFilteredHospitals(filtered.sort((a, b) => new Date(b.lastVisitDate) - new Date(a.lastVisitDate)));
-    setIsFiltered(province || district);
+    setIsFiltered(province || district); 
   };
 
   return (
@@ -38,8 +38,8 @@ function Hospital() {
           />
         </div>
 
-        <div className="flex-grow">
-          <div className="map-container border border-red-500 rounded-md bg-white shadow-md">
+        <div className="flex-grow relative">
+          <div className="w-full h-80 md:h-96 border border-red-500 rounded-md bg-white shadow-md">
             <MapComponent hospitals={filteredHospitals} />
           </div>
         </div>
