@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Typography, Input, IconButton, Button } from "@material-tailwind/react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
@@ -6,13 +7,36 @@ import { useUser } from '@/context/UserContext';
 export function DashboardNavbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { setUser } = useUser(); 
+  const { setUser } = useUser();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleLogout = () => {
-    setUser(null); 
-    localStorage.removeItem("userToken"); 
+    setUser(null);
+    localStorage.removeItem("userToken");
     navigate("/auth/sign-in");
+  };
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    if (query.length >= 2) {
+      fetchSearchResults(query);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const fetchSearchResults = async (query) => {
+    try {
+      const response = await fetch(`/api/search?query=${query}`);
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
   };
 
   return (
@@ -36,8 +60,23 @@ export function DashboardNavbar() {
             <Input
               label="Search"
               className="w-full"
-              style={{ width: '100%' }} 
+              value={searchQuery}
+              onChange={handleSearchChange}
+              style={{ width: '100%' }}
             />
+            {searchQuery.length >= 2 && (
+              <div className="absolute bg-white shadow-lg rounded-md mt-1 w-full max-h-60 overflow-y-auto z-10">
+                {searchResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                    onClick={() => navigate(`/article/${result.id}`)}
+                  >
+                    {result.title}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex items-center space-x-4">

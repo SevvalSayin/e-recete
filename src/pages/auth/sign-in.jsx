@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
-import fakeData from '@/data/fake-data';
+import { insertDocument } from '@/services/apiService';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
 
@@ -12,9 +12,8 @@ function SignIn() {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    // Regular expression for exactly 11 digits
     const tcPattern = /^\d{11}$/;
 
     if (!tcPattern.test(tc)) {
@@ -22,12 +21,16 @@ function SignIn() {
       return;
     }
 
-    const user = fakeData.find((user) => user.tc === tc && user.sifre === password);
-    if (user) {
-      setUser(user);
-      navigate('/dashboard/home');
-    } else {
-      setErrorMessage('T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
+    try {
+      const user = await insertDocument({ tc, password });
+      if (user) {
+        setUser(user);
+        navigate('/dashboard/home');
+      } else {
+        setErrorMessage('T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
+      }
+    } catch (error) {
+      setErrorMessage('Bir hata oluştu: ' + error.message);
     }
   };
 

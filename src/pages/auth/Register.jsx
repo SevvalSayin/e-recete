@@ -56,17 +56,30 @@ function Register() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/register', {
+      // Create the document object for MongoDB
+      const document = {
         name: formFields.name,
         surname: formFields.surname,
-        email: email,
-        password: password,
-        ...formFields
-      });
+        email,
+        password, // Note: In a real application, passwords should be hashed before storage
+        dob: formFields.dob,
+        pob: formFields.pob,
+        countryOfResidence: formFields.countryOfResidence,
+        cityOfResidence: formFields.cityOfResidence,
+        height: formFields.height,
+        weight: formFields.weight,
+        bloodType: formFields.bloodType,
+        degreeOfCloseness: formFields.degreeOfCloseness,
+        mobilePhone: formFields.mobilePhone,
+        tc: formFields.tc
+      };
+      
+      // Call the API service to insert the document
+      await insertDocument(document);
       setNotification('Kayıt başarılı! Lütfen giriş yapın.');
       navigate('/auth/sign-in');
     } catch (error) {
-      setNotification(error.response?.data?.error || 'Bir hata oluştu');
+      setNotification(error.message || 'Bir hata oluştu');
     }
   };
 
@@ -272,72 +285,22 @@ function Register() {
           <DialogHeader>Şartlar ve Koşullar</DialogHeader>
           <DialogBody className="overflow-y-auto max-h-[70vh]">
             <Typography variant="paragraph" className="text-sm">
-            T.C. SAĞLIK BAKANLIĞI e-REÇETE AYDINLATMA METNİ
-Aydınlatma Metni
+              T.C. SAĞLIK BAKANLIĞI e-REÇETE AYDINLATMA METNİ
+              Aydınlatma Metni
 
-Bu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVK Kanunu”) “Veri Sorumlusunun Aydınlatma Yükümlülüğü” kenar başlıklı 10’uncu maddesi uyarınca ve KVK Kanunu kapsamında veri sorumlusu olan T.C. Sağlık Bakanlığı (Bakanlık) tarafından, e-Reçete Kişisel Sağlık Kaydı Sistemi (e-Reçete) kullanıcılarına, kullanıcılara ait kişisel veriler hususunda bilgilendirme yapmak amacıyla hazırlanmıştır. KVK Kanunu uyarınca veri sorumlusu sıfatını haiz Bakanlığın merkez adresi “Bilkent Yerleşkesi, Üniversiteler Mah. Dumlupınar Bulvarı 6001. Cad. No:9 Çankaya/Ankara 06800”dir.
-
-Veri Sorumlusunun Kimliği
-
-e-Reçete’da işlenen kişisel verileriniz bakımından veri sorumlusu T.C. Sağlık Bakanlığı’dır.
-
-Kişisel Verilerin İşlenme Amaçları
-
-Bu sistemde aşağıda yer alan kişisel verileriniz şu amaçlarla işlenebilmektedir:
-
-- Kimlik verisi: İsim, soyisim, anne ve baba adı, T.C. Kimlik ve Yabancı Kimlik Numarası, anne ve baba T.C. Kimlik Numarası, doğum tarihi, medeni hal, evlilik yaşı, uyruk, cinsiyet, pasaport ve Yurt Dışı Provizyon Aktivasyon Sağlık Sistemi (YUPASS) numarası bilgileri kimliğinizin doğrulanması, sağlık hizmeti süreçlerinin yürütülmesi/denetimi/analizi/izlemi amacıyla işlenebilmektedir.
-
-- İletişim verisi: Telefon numarası, adres, ebeveyn telefon numarası, e-posta adresi, acil durumlarda iletişim kurulacak kişinin iletişim numarası, acil durum yönetimi süreçlerinin yürütülmesi, iletişim faaliyetlerinin yürütülmesi, tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, sağlık hizmeti süreçlerinin yürütülmesi/denetimi/analizi/izlemi amacıyla işlenebilmektedir.
-
-- Ceza mahkumiyeti ve güvenlik tedbirleri verisi: Cezaevi öyküsü bilgisi var ise bu bilgileri tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, sağlık hizmetlerinin planlanması/yönetilmesi, sağlık hizmeti süreçlerinin yürütülmesi/denetimi/analizi/raporlanması/izlemi amacıyla işlenebilmektedir.
-
-- İşlem güvenliği verisi: İşlem güvenliği bilgileri bilgi güvenliği süreçlerinin yürütülmesi, erişim yetkilerinin yürütülmesi amacıyla işlenebilmektedir.
-
-- Özlük verisi: İş, öğrenim, meslek ve sosyal güvence durumu bilgileri acil durum yönetimi süreçlerinin yürütülmesi, tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi sağlık hizmeti süreçlerinin yürütülmesi/denetimi/analizi/raporlanması/izlemi amacıyla işlenebilmektedir.
-
-- Finans verisi: Sosyal yardım alma durumu, MEDULA teslim numarası ve fatura bilgileri faaliyetlerin mevzuata uygun yürütülmesi, kamu finansman verimliliğinin artırılması, iş faaliyetlerinin yürütülmesi/denetimi, sağlık hizmeti süreçlerinin yürütülmesi, finans ve muhasebe işlerinin yürütülmesi amacıyla işlenebilmektedir.
-
-- Lokasyon verisi: Konum bilgileri acil durum yönetimi süreçlerinin yürütülmesi, tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, iletişim faaliyetlerinin yürütülmesi, sağlık hizmeti süreçlerinin yürütülmesi amacıyla işlenebilmektedir.
-
-- Sağlık verisi: Sağlık bilgileri iş sürekliliğinin sağlanması faaliyetlerinin yürütülmesi/ denetimi/analizi/raporlanması/izlemi, tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, kamu finansman verimliliğinin artırılması, sağlık hizmetlerinin yürütülmesi/planlanması/yönetilmesi, sağlık hizmetine yönelik bildirim süreçlerinin (SMS, Push Notification, e-posta vb.) yürütülmesi amacıyla işlenebilmektedir.
-
-- Mesleki deneyim verisi: Meslek bilgileri iş sürekliliğinin sağlanması faaliyetlerinin yürütülmesi, tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, sağlık hizmeti süreçlerinin yürütülmesi amacıyla işlenebilmektedir.
-
-- Görsel ve işitsel veri: Sağlık problemi ile ilgili fotoğrafınız ve profil içerisinde eklenen fotoğrafınız iş sürekliliğinin sağlanması faaliyetlerinin yürütülmesi, tıbbi teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, sağlık hizmeti süreçlerinin yürütülmesi amacıyla işlenebilmektedir.
-
-- Ülke verisi: Geldiği ülke bilgisi sağlık hizmeti süreçlerinin yürütülmesi amacıyla işlenebilmektedir.
-
-Kişisel Verilerin Aktarımı
-
-Sağlık hizmeti sunan özel sağlık kuruluşlarından hizmet almanız halinde, e-Reçete’daki kişisel verileriniz KVK Kanunu’nun 6’ncı maddesinin üçüncü fıkrası kapsamında mevcut güvenlik tercihleriniz doğrultusunda ilgili hekim(ler)in erişimine sunulabilmektedir. Yoğun bakım veya acil sağlık hizmeti almanız halinde, durumunuzun hayati tehlike arz edebilecek olması sebebiyle e-Reçete hesabınızdaki veriler, ilgili hekimin erişimine sunulabilmektedir. Ayrıca, almış olduğunuz sağlık hizmeti bedelinin Sosyal Güvenlik Kurumu tarafından karşılanacak olması halinde, sağlık hizmeti süreçlerinizin yürütülmesi amacıyla kişisel verileriniz T.C. Sosyal Güvenlik Kurumunun erişimine sunulabilmektedir. KVK Kanunu’nun 28’inci maddesinin ilk fıkrasında yer alan muafiyet halleri saklıdır.
-
-Hasta Takip Ekranları
-
-Sağlık tesislerinde muayene sırasının takip edildiği hasta takip ve poliklinik çağrı ekranlarında adınız ve soyadınızın maskelenerek (Ör: Ay*** Ün***) gösterilmesini talep etmeniz durumunda, e-Reçete profili üzerinde yer alan Profil Düzenleme alanında “Sağlık kuruluşlarındaki hasta takip ve poliklinik çağrı ekranlarında adımın ve soyadımın yıldızlanarak gösterilmesini istiyorum. Adımın ve soyadımın açıkça belirtilmesini istemiyorum.” seçeneğini işaretleme imkânınız bulunmaktadır.
-
-İki Aşamalı Güvenli Giriş
-
-e-Reçete profiline girişiniz esnasında T.C. kimlik numaranız ve e-Reçete şifrenizi girdikten sonra profilinizde yer alan birincil olarak kayıtlı telefon numarasına kısa mesaj (SMS) ile şifre gönderilebilmekte olup bu özelliği e-Reçete profilinizdeki Profil Düzenleme alanında aktifleştirebilme imkanınız bulunmaktadır.
-
-Kişisel Veri Toplamanın Yöntemi ve Hukuki Sebebi
-
-Kişisel verileriniz e-Reçete Sistemi aracılığı ile otomatik yollarla veya boy, kilo gibi bilgilerin manuel olarak sizin tarafınızdan profilinize eklenmesi suretiyle KVK Kanunu’nun 6’ncı maddesinin ikinci fıkrasındaki “Özel nitelikli kişisel verilerin, ilgilinin açık rızası olmaksızın işlenmesi yasaktır.” hukuki sebebine dayanılarak elde edilebilmektedir/işlenebilmektedir.
-
-Kimlik, iletişim, işlem güvenliği, özlük, finans, lokasyon, mesleki deneyim, ülke verisi, görsel ve işitsel veri kategorisinde bulunan kişisel verileriniz, KVK Kanunu’nun 5’inci maddesinin ikinci fıkrasının (a) bendindeki “Kanunlarda açıkça öngörülmesi”, (ç) bendindeki “Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması” hukuki sebeplerine; sağlık verisi ile ceza mahkumiyeti ve güvenlik tedbirleri veri kategorisinde bulunan kişisel verileriniz ise KVK Kanunu’nun 6’ncı maddesinin üçüncü fıkrasındaki “Kamu sağlığının korunması, koruyucu hekimlik, tıbbî teşhis, tedavi ve bakım hizmetlerinin yürütülmesi, sağlık hizmetleri ile finansmanının planlanması ve yönetimi amacıyla, sır saklama yükümlülüğü altında bulunan kişiler veya yetkili kurum ve kuruluşlar tarafından ilgilinin açık rızası aranmaksızın işlenebilir.” hukuki sebebine dayanılarak işlenebilmektedir.
-
-İlgili Kişilerin Hakları ve Veri Sorumlusuna Başvuru
-
-e-Reçete kullanıcıları KVK Kanunu’nun 11’inci maddesinde düzenlenen haklarını, KVK Kanunu’nun 13’üncü maddesi ve Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ hükümleri çerçevesinde Bakanlığa başvurmak suretiyle kullanabilir. KVK Kanunu’nun 13’üncü maddesi uyarınca yapılacak yazılı başvurular "T.C. Sağlık Bakanlığı, Üniversiteler Mahallesi, 6001. Cadde, No:9, Çankaya, Ankara" adresine; Kayıtlı Elektronik Posta (KEP) ile yapılacak başvurular ise "sb@hs01.kep.tr" adresine iletilmelidir.
-</Typography>
-            <Checkbox
-              label="Şartları ve koşulları okudum ve kabul ediyorum"
-              checked={confirmationChecked}
-              onChange={handleConfirmationChange}
-              className="text-sm mt-4"
-            />
+              Bu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVK Kanunu”) “Veri Sorumlusunun Aydınlatma Yükümlülüğü” kenar başlıklı 10’uncu maddesi uyarınca ve KVK Kanunu kapsamında veri sorumlusu olan T.C. Sağlık Bakanlığı (Bakanlık) tarafından, e-Reçete Kişisel Sağlık Kaydı Sistemi (e-Reçete) kullanıcılarına, kullanıcılara ait kişisel veriler hususunda bilgilendirme yapmak amacıyla hazırlanmıştır. KVK Kanunu uyarınca veri sorumlusunun merkez adresi “Bilkent Yerleşkesi, Üniversiteler Mah. Dumlupınar Bulvarı 6001. Cad. No: 8 06800 Çankaya / Ankara” adresidir. Şahsen başvurulabilir.
+              <br />
+              <br />
+              Kişisel Verilerin İşlenme Amaçları
+              Kişisel verileriniz, sizinle yürütülecek tüm süreçler, e-Reçete sisteminin işletilmesi, e-Reçete ile ilgili raporlamaların yapılması, ve sağlık bilgilerinizin paylaşımı gibi konularda kullanılacaktır.
+            </Typography>
           </DialogBody>
           <DialogFooter>
-            <Button  onClick={handleConfirm} disabled={!confirmationChecked} className="text-sm">
+            <Button
+              variant="gradient"
+              color="red"
+              onClick={handleConfirm}
+            >
               Onayla
             </Button>
           </DialogFooter>
