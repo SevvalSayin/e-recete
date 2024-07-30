@@ -1,4 +1,5 @@
 // src/services/apiService.js
+
 const API_URL = 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nauitwn/endpoint/data/v1';
 const API_KEY = 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG';
 
@@ -44,5 +45,15 @@ export const findDocuments = async (filter) => {
     database: 'deneme',
     dataSource: 'e-recete',
     filter
+  });
+};
+
+// Function to sign in user
+export const signInUser = async ({ tc, password }) => {
+  return fetchFromApi('action/find', 'POST', {
+    collection: 'kayıt',
+    database: 'deneme',
+    dataSource: 'e-recete',
+    filter: { tc, password }
   });
 };

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
+import { signInUser } from '@/services/apiService';
+import { Input, Button, Typography, Card } from '@material-tailwind/react'; // Added Card import
 import { insertDocument } from '@/services/apiService';
-import { Card, Input, Button, Typography } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
 
 function SignIn() {
   const [tc, setTc] = useState('');
@@ -14,23 +14,12 @@ function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const tcPattern = /^\d{11}$/;
-
-    if (!tcPattern.test(tc)) {
-      setErrorMessage('T.C. Kimlik Numaranız 11 haneli olmalıdır.');
-      return;
-    }
-
     try {
-      const user = await insertDocument({ tc, password });
-      if (user) {
-        setUser(user);
-        navigate('/dashboard/home');
-      } else {
-        setErrorMessage('T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
-      }
+      const user = await signInUser({ tc, password });
+      setUser(user);
+      navigate('/dashboard/home');
     } catch (error) {
-      setErrorMessage('Bir hata oluştu: ' + error.message);
+      setErrorMessage(error.message || 'T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
     }
   };
 

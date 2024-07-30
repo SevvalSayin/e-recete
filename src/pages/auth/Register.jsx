@@ -11,9 +11,9 @@ import {
   DialogBody,
   DialogFooter
 } from '@material-tailwind/react';
+import { insertDocument } from "@/services/apiService"; // Import the insertDocument function
 
 function Register() {
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [notification, setNotification] = useState('');
@@ -23,15 +23,6 @@ function Register() {
   const [formFields, setFormFields] = useState({
     name: '',
     surname: '',
-    dob: '',
-    pob: '',
-    countryOfResidence: '',
-    cityOfResidence: '',
-    height: '',
-    weight: '',
-    bloodType: '',
-    degreeOfCloseness: '',
-    mobilePhone: '',
     tc: ''
   });
 
@@ -51,31 +42,15 @@ function Register() {
       setNotification('TC kimlik numarası 11 haneli olmalıdır');
       return;
     }
-    if (!/^\d{10}$/.test(formFields.mobilePhone)) {
-      setNotification('Cep telefonu numarası 10 haneli olmalıdır ve sıfır ile başlamamalıdır');
-      return;
-    }
     try {
-      // Create the document object for MongoDB
       const document = {
         name: formFields.name,
         surname: formFields.surname,
-        email,
         password, // Note: In a real application, passwords should be hashed before storage
-        dob: formFields.dob,
-        pob: formFields.pob,
-        countryOfResidence: formFields.countryOfResidence,
-        cityOfResidence: formFields.cityOfResidence,
-        height: formFields.height,
-        weight: formFields.weight,
-        bloodType: formFields.bloodType,
-        degreeOfCloseness: formFields.degreeOfCloseness,
-        mobilePhone: formFields.mobilePhone,
         tc: formFields.tc
       };
       
-      // Call the API service to insert the document
-      await axios.post('/api/register', document);
+      await insertDocument(document);
       setNotification('Kayıt başarılı! Lütfen giriş yapın.');
       navigate('/auth/sign-in');
     } catch (error) {
@@ -112,9 +87,9 @@ function Register() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 py-8">
-      <div className="w-full max-w-4xl bg-white shadow-lg rounded-3xl p-8">
+      <div className="w-full max-w-2xl bg-white shadow-lg rounded-3xl p-8">
         <h1 className="text-2xl font-bold text-center mb-6 text-red-500">Kayıt Ol</h1>
-        <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" onSubmit={handleRegister}>
+        <form className="grid grid-cols-1 gap-4" onSubmit={handleRegister}>
           <Input
             size="lg"
             label="Ad"
@@ -137,110 +112,11 @@ function Register() {
           />
           <Input
             size="lg"
-            label="Doğum Tarihi"
-            type="date"
-            name="dob"
-            value={formFields.dob}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Doğum Yeri"
-            type="text"
-            name="pob"
-            value={formFields.pob}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Yaşadığınız Ülke"
-            type="text"
-            name="countryOfResidence"
-            value={formFields.countryOfResidence}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Yaşadığınız Şehir"
-            type="text"
-            name="cityOfResidence"
-            value={formFields.cityOfResidence}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Boy"
-            type="text"
-            name="height"
-            value={formFields.height}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Kilo"
-            type="text"
-            name="weight"
-            value={formFields.weight}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Kan Grubu"
-            type="text"
-            name="bloodType"
-            value={formFields.bloodType}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Yakınlık Derecesi"
-            type="text"
-            name="degreeOfCloseness"
-            value={formFields.degreeOfCloseness}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="Cep Telefonu"
-            type="text"
-            name="mobilePhone"
-            value={formFields.mobilePhone}
-            onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
             label="TC Kimlik No"
             type="text"
             name="tc"
             value={formFields.tc}
             onChange={handleInputChange}
-            required
-            className="text-sm"
-          />
-          <Input
-            size="lg"
-            label="E-posta"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             required
             className="text-sm"
           />
@@ -262,7 +138,7 @@ function Register() {
             required
             className="text-sm"
           />
-          <div className="flex items-center gap-2 md:col-span-2 lg:col-span-3">
+          <div className="flex items-center gap-2">
             <Checkbox
               label="Şartları ve koşulları kabul ediyorum"
               checked={termsAccepted}
@@ -270,11 +146,11 @@ function Register() {
               className="text-sm"
             />
           </div>
-          <Button className="w-full md:col-span-2 lg:col-span-3" color="red" type="submit">
+          <Button className="w-full" color="red" type="submit">
             Kayıt Ol
           </Button>
           {notification && (
-            <Typography color="red" className="mt-4 text-center w-full md:col-span-2 lg:col-span-3 text-sm">
+            <Typography color="red" className="mt-4 text-center w-full text-sm">
               {notification}
             </Typography>
           )}
@@ -287,7 +163,6 @@ function Register() {
             <Typography variant="paragraph" className="text-sm">
               T.C. SAĞLIK BAKANLIĞI e-REÇETE AYDINLATMA METNİ
               Aydınlatma Metni
-
               Bu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVK Kanunu”) “Veri Sorumlusunun Aydınlatma Yükümlülüğü” kenar başlıklı 10’uncu maddesi uyarınca ve KVK Kanunu kapsamında veri sorumlusunun merkez adresi “Bilkent Yerleşkesi, Üniversiteler Mah. Dumlupınar Bulvarı 6001. Cad. No: 8 06800 Çankaya / Ankara” adresidir. Şahsen başvurulabilir.
               <br />
               <br />
@@ -313,7 +188,7 @@ function Register() {
         </div>
       </Dialog>
     </div>
-  );
+  ); 
 }
 
 export default Register;
