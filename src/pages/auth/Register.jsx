@@ -75,7 +75,7 @@ function Register() {
       };
       
       // Call the API service to insert the document
-      await insertDocument(document);
+      await axios.post('/api/register', document);
       setNotification('Kayıt başarılı! Lütfen giriş yapın.');
       navigate('/auth/sign-in');
     } catch (error) {
@@ -288,7 +288,7 @@ function Register() {
               T.C. SAĞLIK BAKANLIĞI e-REÇETE AYDINLATMA METNİ
               Aydınlatma Metni
 
-              Bu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVK Kanunu”) “Veri Sorumlusunun Aydınlatma Yükümlülüğü” kenar başlıklı 10’uncu maddesi uyarınca ve KVK Kanunu kapsamında veri sorumlusu olan T.C. Sağlık Bakanlığı (Bakanlık) tarafından, e-Reçete Kişisel Sağlık Kaydı Sistemi (e-Reçete) kullanıcılarına, kullanıcılara ait kişisel veriler hususunda bilgilendirme yapmak amacıyla hazırlanmıştır. KVK Kanunu uyarınca veri sorumlusunun merkez adresi “Bilkent Yerleşkesi, Üniversiteler Mah. Dumlupınar Bulvarı 6001. Cad. No: 8 06800 Çankaya / Ankara” adresidir. Şahsen başvurulabilir.
+              Bu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVK Kanunu”) “Veri Sorumlusunun Aydınlatma Yükümlülüğü” kenar başlıklı 10’uncu maddesi uyarınca ve KVK Kanunu kapsamında veri sorumlusunun merkez adresi “Bilkent Yerleşkesi, Üniversiteler Mah. Dumlupınar Bulvarı 6001. Cad. No: 8 06800 Çankaya / Ankara” adresidir. Şahsen başvurulabilir.
               <br />
               <br />
               Kişisel Verilerin İşlenme Amaçları
@@ -296,6 +296,12 @@ function Register() {
             </Typography>
           </DialogBody>
           <DialogFooter>
+            <Checkbox
+              label="Şartları ve koşulları kabul ediyorum"
+              checked={confirmationChecked}
+              onChange={handleConfirmationChange}
+              className="text-sm"
+            />
             <Button
               variant="gradient"
               color="red"
