@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-
+import axios from 'axios';
 
 const HomeDataContext = createContext();
 
@@ -17,16 +17,17 @@ export const HomeDataProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-    
-        const cardsData = await fetch('/api/statistics/cards').then(res => res.json());
-        const chartsData = await fetch('/api/statistics/charts').then(res => res.json());
-        const projectsData = await fetch('/api/projects').then(res => res.json());
-        const ordersData = await fetch('/api/orders').then(res => res.json());
 
-        setStatisticsCardsData(cardsData);
-        setStatisticsChartsData(chartsData);
-        setProjectsTableData(projectsData);
-        setOrdersOverviewData(ordersData);
+        // Using Axios to fetch data
+        const cardsResponse = await axios.get('/api/statistics/cards');
+        const chartsResponse = await axios.get('/api/statistics/charts');
+        const projectsResponse = await axios.get('/api/projects');
+        const ordersResponse = await axios.get('/api/orders');
+
+        setStatisticsCardsData(cardsResponse.data);
+        setStatisticsChartsData(chartsResponse.data);
+        setProjectsTableData(projectsResponse.data);
+        setOrdersOverviewData(ordersResponse.data);
         setLoading(false);
       } catch (error) {
         setError(error);

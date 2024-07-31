@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
 import { signInUser } from '@/services/apiService';
-import { Input, Button, Typography, Card } from '@material-tailwind/react'; // Added Card import
-import { insertDocument } from '@/services/apiService';
+import { Input, Button, Typography, Card } from '@material-tailwind/react';
 
 function SignIn() {
   const [tc, setTc] = useState('');
-  const [password, setPassword] = useState('');
+  const [sifre, setSifre] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const { setUser } = useUser();
@@ -15,10 +14,19 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const user = await signInUser({ tc, password });
-      setUser(user);
-      navigate('/dashboard/home');
+      console.log("Signing in with TC:", tc, "and password:", sifre);
+      const response = await signInUser({ tc, sifre });
+      console.log("User signed in:", response);
+
+      if (response.documents && response.documents.length > 0) {
+        const user = response.documents[0];
+        setUser(user);
+        navigate('/dashboard/home');
+      } else {
+        setErrorMessage('T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
+      }
     } catch (error) {
+      console.error("Sign-in error:", error);
       setErrorMessage(error.message || 'T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
     }
   };
@@ -61,8 +69,8 @@ function SignIn() {
                   type="password"
                   size="lg"
                   label="Şifre"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={sifre}
+                  onChange={(e) => setSifre(e.target.value)}
                   required
                 />
               </div>
