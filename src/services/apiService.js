@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const API_URL = '/api';
 const API_KEY = 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3005/api', // Update this to match your backend server URL
+  baseURL: 'http://192.168.1.5:3005/api', // Update this to match your backend server URL
   headers: {
     'Content-Type': 'application/json',
     'api-key': API_KEY,
