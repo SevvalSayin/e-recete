@@ -1,8 +1,13 @@
 const express = require('express');
-const serveStatic = require("serve-static");
+const serveStatic = require('serve-static');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
+
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
 // Sample data for search functionality

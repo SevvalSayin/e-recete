@@ -11,7 +11,7 @@ import {
   DialogBody,
   DialogFooter
 } from '@material-tailwind/react';
-import { insertDocument } from "@/services/apiService"; // Import the insertDocument function
+import { insertDocument } from "@/services/apiService"; 
 
 function Register() {
   const [password, setPassword] = useState('');
@@ -46,10 +46,16 @@ function Register() {
       const document = {
         name: formFields.name,
         surname: formFields.surname,
-        password, // Note: In a real application, passwords should be hashed before storage
+        password,
         tc: formFields.tc
       };
       
+      
+      console.log(document);
+
+      
+      alert('Başarılı!');
+
       await insertDocument(document);
       setNotification('Kayıt başarılı! Lütfen giriş yapın.');
       navigate('/auth/sign-in');
