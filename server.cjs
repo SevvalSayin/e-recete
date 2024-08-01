@@ -5,13 +5,13 @@ const cors = require('cors');
 
 const app = express();
 
+// CORS Configuration
 const corsOptions = {
-  origin: '*', // Allows all origins
+  origin: '*', // Allows all origins; replace with specific origins as needed
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'api-key', 'Accept']
 };
 
-// Enable CORS for all routes
 app.use(cors(corsOptions));
 
 app.use(serveStatic(path.join(__dirname, 'dist')));
@@ -38,5 +38,5 @@ app.get('*', (req, res) => {
 
 const port = process.env.PORT || 3005;
 app.listen(port, () => {
-  console.log(`Server running at http://192.168.1.5:${port}`); // Use your local IP address
+  console.log(`Server running at http://localhost:${port}`);
 });
