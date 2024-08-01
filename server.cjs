@@ -5,13 +5,14 @@ const cors = require('cors');
 
 const app = express();
 
-// CORS Configuration
+// Update CORS settings to allow your specific frontend URL
 const corsOptions = {
-  origin: '*', // Allows all origins; replace with specific origins as needed
-  methods: ['GET', 'POST'],
+  origin: 'https://e-recete-f15179303064.herokuapp.com', // Allow only your Heroku app
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'api-key', 'Accept']
 };
 
+// Enable CORS for all routes
 app.use(cors(corsOptions));
 
 app.use(serveStatic(path.join(__dirname, 'dist')));

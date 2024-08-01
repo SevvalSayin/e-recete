@@ -1,9 +1,13 @@
 import axios from 'axios';
 
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://e-recete-f15179303064.herokuapp.com/api'
+  : 'http://localhost:5173/api';
+
 const API_KEY = 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://192.168.1.5:3005/api', // Replace with your local IP address
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
     'api-key': API_KEY,
@@ -12,7 +16,6 @@ const axiosInstance = axios.create({
   maxBodyLength: Infinity,
 });
 
-// Function to insert a document
 export const insertDocument = async (document) => {
   const data = {
     collection: 'kayıt',
@@ -41,13 +44,12 @@ export const insertDocument = async (document) => {
   }
 };
 
-// Function to sign in a user
-export const signInUser = async ({ tc, sifre }) => {
+export const findDocuments = async (filter = {}) => {
   const data = {
     collection: 'kayıt',
     database: 'deneme',
     dataSource: 'e-recete',
-    filter: { tc, sifre },
+    filter,
   };
 
   try {
@@ -70,4 +72,9 @@ export const signInUser = async ({ tc, sifre }) => {
   }
 };
 
-// Export other functions as needed
+export const signInUser = async ({ tc, sifre }) => {
+  console.log('Signing in user with TC:', tc, 'and password:', sifre);
+  const result = await findDocuments({ tc, sifre });
+  console.log('Find documents result:', result);
+  return result;
+};
