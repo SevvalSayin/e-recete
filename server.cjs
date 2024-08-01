@@ -5,31 +5,23 @@ const cors = require('cors');
 
 const app = express();
 
-// Update CORS settings to allow your specific frontend URL
 const corsOptions = {
   origin: 'https://e-recete-f15179303064.herokuapp.com', // Allow only your Heroku app
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'api-key', 'Accept']
 };
 
-// Enable CORS for all routes
 app.use(cors(corsOptions));
+app.use(express.json()); // To parse JSON bodies
 
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
-// Sample data for search functionality
-const articles = [
-  { id: 1, title: "React Introduction" },
-  { id: 2, title: "Understanding JavaScript" },
-  { id: 3, title: "Advanced CSS Techniques" },
-  // Add more sample articles as needed
-];
-
-// API endpoint for search functionality
-app.get('/api/search', (req, res) => {
-  const query = req.query.query.toLowerCase();
-  const results = articles.filter(article => article.title.toLowerCase().includes(query));
-  res.json(results);
+// Example endpoint
+app.post('/api/action/find', async (req, res) => {
+  // Handle the find action
+  const { filter } = req.body;
+  // Your database logic here
+  res.json({ message: 'Find action received', filter });
 });
 
 // Handle all routes by serving 'index.html'
