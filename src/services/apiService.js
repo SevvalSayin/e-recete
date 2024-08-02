@@ -1,21 +1,4 @@
-<<<<<<< HEAD
 import axiosInstance from './axiosInstance';
-=======
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL;
-const API_KEY = import.meta.env.VITE_API_KEY;
-
-const axiosInstance = axios.create({
-  baseURL: '/api',
-  headers: {
-    'Content-Type': 'application/json',
-    'api-key': API_KEY,
-    'Accept': 'application/json',
-  },
-  maxBodyLength: Infinity,
-});
->>>>>>> be457a79f067c8c0178a37c7ac2f1be52dd295c8
 
 export const insertDocument = async (document) => {
   const data = {
