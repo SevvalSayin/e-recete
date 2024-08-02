@@ -35,10 +35,9 @@ app.use('/api', async (req, res) => {
   }
 });
 
-// Serve static files
+
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
-// Handle all routes by serving 'index.html'
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });

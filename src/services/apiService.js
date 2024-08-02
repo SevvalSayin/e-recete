@@ -79,3 +79,18 @@ export const signInUser = async ({ tc, sifre }) => {
   console.log('Find documents result:', result);
   return result;
 };
+
+export const signUpdateUser = async ({name, surname, tc, email, phone, date, length, weight, blood}) => {
+  const document = { name, surname, tc, email, phone, date, length, weight, blood };
+  
+  try {
+    console.log('Updating user with data:', document);
+    
+    const response = await insertDocument(document); 
+    console.log('Update response:', response);
+    return response;
+  } catch (error) {
+    console.error('Update error:', error.message);
+    throw new Error('Failed to update user information.');
+  }
+};

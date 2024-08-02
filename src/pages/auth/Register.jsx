@@ -22,7 +22,7 @@ function Register() {
     e.preventDefault();
     if (password !== confirmPassword) {
       setNotification('Şifreler uyuşmuyor');
-      return;
+      return; 
     }
     if (!termsAccepted) {
       setNotification('Şartları ve koşulları kabul etmelisiniz');
