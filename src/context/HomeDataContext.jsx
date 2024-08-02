@@ -19,10 +19,10 @@ export const HomeDataProvider = ({ children }) => {
         setLoading(true);
 
         // Using Axios to fetch data
-        const cardsResponse = await axios.post('/api/statistics/cards');
-        const chartsResponse = await axios.post('/api/statistics/charts');
-        const projectsResponse = await axios.post('/api/projects');
-        const ordersResponse = await axios.post('/api/orders');
+        const cardsResponse = await axios.get('/api/statistics/cards');
+        const chartsResponse = await axios.get('/api/statistics/charts');
+        const projectsResponse = await axios.get('/api/projects');
+        const ordersResponse = await axios.get('/api/orders');
 
         setStatisticsCardsData(cardsResponse.data);
         setStatisticsChartsData(chartsResponse.data);
