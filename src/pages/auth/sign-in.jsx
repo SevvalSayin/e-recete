@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
-import { signInUser } from '@/services/apiService';
+import { signInUser } from '../../services/apiService'; // Correct path
 import { Input, Button, Typography, Card } from '@material-tailwind/react';
 
 function SignIn() {
@@ -14,20 +14,20 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      console.log("Signing in with TC:", tc, "and password:", sifre);
-      const response = await signInUser({ tc, sifre });
-      console.log("User signed in:", response);
-
-      if (response.documents && response.documents.length > 0) {
-        const user = response.documents[0];
+      const result = await signInUser({ tc, sifre });
+      console.log(result);
+  
+      if (result.length > 0) {
+        const user = result[0];
         setUser(user);
         navigate('/dashboard/home');
+        alert("Başarılı");
       } else {
-        setErrorMessage('T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
+        setErrorMessage('T.C. Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
       }
     } catch (error) {
       console.error("Sign-in error:", error);
-      setErrorMessage(error.message || 'T.C Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
+      setErrorMessage(error.message || 'T.C. Kimlik numaranızı veya şifrenizi hatalı girdiniz.');
     }
   };
 

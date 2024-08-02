@@ -1,17 +1,8 @@
+// src/pages/auth/Register.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import {
-  Input,
-  Button,
-  Typography,
-  Checkbox,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter
-} from '@material-tailwind/react';
-import { insertDocument } from "@/services/apiService"; // Import the insertDocument function
+import { Input, Button, Typography, Checkbox, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
+import { signUpUser } from "@/services/apiService" ;
 
 function Register() {
   const [password, setPassword] = useState('');
@@ -43,17 +34,18 @@ function Register() {
       return;
     }
     try {
-      const document = {
+      const result = await signUpUser({
+        tc: formFields.tc,
+        password,
         name: formFields.name,
-        surname: formFields.surname,
-        password, // Note: In a real application, passwords should be hashed before storage
-        tc: formFields.tc
-      };
-      
-      await insertDocument(document);
+        surname: formFields.surname
+      });
+      console.log('User signed up successfully:', result);
+      alert("başarılı");
       setNotification('Kayıt başarılı! Lütfen giriş yapın.');
       navigate('/auth/sign-in');
     } catch (error) {
+      console.error('Registration error:', error);
       setNotification(error.message || 'Bir hata oluştu');
     }
   };

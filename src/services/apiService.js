@@ -1,17 +1,4 @@
-import axios from 'axios';
-
-const API_URL = '/api';
-const API_KEY = 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG';
-
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5173/api', // Update if necessary
-  headers: {
-    'Content-Type': 'application/json',
-    'api-key': API_KEY,
-    'Accept': 'application/json',
-  },
-  maxBodyLength: Infinity,
-});
+import axiosInstance from './axiosInstance';
 
 export const insertDocument = async (document) => {
   const data = {
@@ -22,6 +9,8 @@ export const insertDocument = async (document) => {
   };
 
   try {
+    console.log('Request URL:', '/action/insertOne');
+    console.log('Request Data:', data);
     const response = await axiosInstance.post('/action/insertOne', data);
     console.log('Response Status Code:', response.status);
     console.log('Parsed Result:', response.data);
@@ -29,16 +18,12 @@ export const insertDocument = async (document) => {
   } catch (error) {
     console.error('API request error:', error.message);
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       console.error('Error Data:', error.response.data);
       throw new Error(`Error: ${error.response.status} - ${error.response.data.message || error.response.statusText}`);
     } else if (error.request) {
-      // The request was made but no response was received
       console.error('No response received:', error.request);
       throw new Error('No response received from the server. Check your network connection or CORS policy.');
     } else {
-      // Something happened in setting up the request that triggered an Error
       console.error('Error setting up request:', error.message);
       throw new Error('Error setting up the request.');
     }
@@ -54,32 +39,43 @@ export const findDocuments = async (filter = {}) => {
   };
 
   try {
+    console.log('Request URL:', '/action/find');
+    console.log('Request Data:', data);
     const response = await axiosInstance.post('/action/find', data);
     console.log('Response Status Code:', response.status);
     console.log('Parsed Result:', response.data);
-    return response.data;
+    return response.data.documents;
   } catch (error) {
     console.error('API request error:', error.message);
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       console.error('Error Data:', error.response.data);
       throw new Error(`Error: ${error.response.status} - ${error.response.data.message || error.response.statusText}`);
     } else if (error.request) {
-      // The request was made but no response was received
       console.error('No response received:', error.request);
-      throw new Error('No response received from the server. Check your network connection or CORS policy.');
+      throw new Error('No response received from the server.');
     } else {
-      // Something happened in setting up the request that triggered an Error
       console.error('Error setting up request:', error.message);
       throw new Error('Error setting up the request.');
     }
   }
 };
 
+export const signUpUser = async ({ tc, password, name, surname }) => {
+  const existingUsers = await findDocuments({ tc });
+
+  if (existingUsers.length > 0) {
+    /* alert('Üzgünüz, bu TC numarası ile kayıtlı bir kullanıcı bulunmaktadır'); */
+    throw new Error('Üzgünüz, bu TC numarası ile kayıtlı bir kullanıcı bulunmaktadır');
+  }
+
+  const document = { tc, password, name, surname };
+  console.log('Signing up user with TC:', tc, 'and password:', password, 'name:', name, 'surname:', surname);
+  return await insertDocument(document); 
+};
+
 export const signInUser = async ({ tc, sifre }) => {
   console.log('Signing in user with TC:', tc, 'and password:', sifre);
-  const result = await findDocuments({ tc, sifre });
+  const result = await findDocuments({ tc, password: sifre });
   console.log('Find documents result:', result);
   return result;
 };

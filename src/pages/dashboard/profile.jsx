@@ -32,7 +32,6 @@ function Profile() {
     };
 
     const handleSubmit = () => {
-        // Update the profileData with formData here
         setProfileData(formData);
         setIsModalOpen(false);
     };
@@ -75,13 +74,16 @@ function Profile() {
                     <div className="grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3">
                         <ProfileInfoCard
                             title="Profil Bilgileri"
-                            
                             details={{
                                 Ad: profileData.isim,
                                 Soyad: profileData.soyisim,
                                 Email: profileData.email,
                                 Telefon: profileData.telefon,
                                 "T.C. Kimlik No": profileData.tc,
+                                "Doğum Tarihi": profileData.dogumTarihi,
+                                Boy: profileData.boy,
+                                Kilo: profileData.kilo,
+                                "Kan Grubu": profileData.kanGrubu,
                             }}
                         />
                     </div>
@@ -135,6 +137,38 @@ function Profile() {
                                 onChange={handleInputChange}
                                 className="w-full p-2 mt-2 border rounded"
                                 placeholder="T.C. Kimlik No"
+                            />
+                            <input
+                                type="date"
+                                name="dogumTarihi"
+                                value={formData.dogumTarihi || ''}
+                                onChange={handleInputChange}
+                                className="w-full p-2 mt-2 border rounded"
+                                placeholder="Doğum Tarihi"
+                            />
+                            <input
+                                type="text"
+                                name="boy"
+                                value={formData.boy || ''}
+                                onChange={handleInputChange}
+                                className="w-full p-2 mt-2 border rounded"
+                                placeholder="Boy"
+                            />
+                            <input
+                                type="text"
+                                name="kilo"
+                                value={formData.kilo || ''}
+                                onChange={handleInputChange}
+                                className="w-full p-2 mt-2 border rounded"
+                                placeholder="Kilo"
+                            />
+                            <input
+                                type="text"
+                                name="kanGrubu"
+                                value={formData.kanGrubu || ''}
+                                onChange={handleInputChange}
+                                className="w-full p-2 mt-2 border rounded"
+                                placeholder="Kan Grubu"
                             />
                         </div>
                         <div className="mt-4">
