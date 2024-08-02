@@ -44,7 +44,7 @@ export const findDocuments = async (filter = {}) => {
     const response = await axiosInstance.post('/action/find', data);
     console.log('Response Status Code:', response.status);
     console.log('Parsed Result:', response.data);
-    return response.data.documents;
+    return response.data.documents || []; // Boş dizi döndürüyoruz
   } catch (error) {
     console.error('API request error:', error.message);
     if (error.response) {
@@ -59,12 +59,10 @@ export const findDocuments = async (filter = {}) => {
     }
   }
 };
-
 export const signUpUser = async ({ tc, password, name, surname }) => {
-  const existingUsers = await findDocuments({ tc });
+  const existingUsers = await findDocuments({ tc }) || [];
 
   if (existingUsers.length > 0) {
-    /* alert('Üzgünüz, bu TC numarası ile kayıtlı bir kullanıcı bulunmaktadır'); */
     throw new Error('Üzgünüz, bu TC numarası ile kayıtlı bir kullanıcı bulunmaktadır');
   }
 
