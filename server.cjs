@@ -2,7 +2,7 @@ const express = require('express');
 const serveStatic = require('serve-static');
 const path = require('path');
 const cors = require('cors');
-const request = require('request');
+const axios = require('axios');
 
 const app = express();
 
@@ -15,26 +15,24 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json()); 
 
-
-app.use('/api', (req, res) => {
+app.use('/api', async (req, res) => {
   const url = `https://eu-central-1.aws.data.mongodb-api.com/app/data-nauitwn/endpoint/data/v1${req.url}`;
   const options = {
-    url: url,
+    url,
     headers: {
-      'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG' 
+      'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'
     },
     method: req.method,
-    json: true,
-    body: req.body
+    data: req.body
   };
-  request(options, (error, response, body) => {
-    if (error) {
-      console.error('Proxy error:', error);
-      res.status(500).send(error);
-    } else {
-      res.status(response.statusCode).json(body);
-    }
-  });
+
+  try {
+    const response = await axios(options);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('Proxy error:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // Serve static files
