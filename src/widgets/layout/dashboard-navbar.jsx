@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Typography, Input, IconButton, Button } from "@material-tailwind/react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { useUser } from '@/context/UserContext';
-import Sidenav from './Sidenav'; // Sidenav bileşenini içe aktarın
+import Sidenav from '@/widgets/layout/sidenav'; // Sidenav bileşenini içe aktarın
 import routes from "@/routes";
 
 export function DashboardNavbar() {
