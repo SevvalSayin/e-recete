@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Avatar, Typography, Button } from '@material-tailwind/react';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { ProfileInfoCard } from '@/widgets/cards';
-import fakeData from '@/data/fake-data';
 import { useUser } from '@/context/UserContext';
 import { Dialog } from '@headlessui/react';
-import { signUpdateUser } from "@/services/apiService"; // Ensure this function is properly imported
+import { signUpdateUser } from "@/services/apiService"; // Ensure this import is correct
 
 function Profile() {
-    const { user } = useUser();
+    const { user, setUser } = useUser();
     const [profileData, setProfileData] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -22,13 +21,10 @@ function Profile() {
         weight: '',
         blood: ''
     });
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        const data = fakeData.find(person => person.tc === user?.tc);
-        if (data) {
-            setProfileData(data);
-            setFormData(data);
-        } else {
+        if (user) {
             setProfileData(user);
             setFormData(user);
         }
@@ -42,13 +38,40 @@ function Profile() {
         });
     };
 
+    const validateForm = () => {
+        let newErrors = {};
+        
+        if (!/^\d{10}$/.test(formData.phone)) {
+            newErrors.phone = "Telefon numarası 10 haneli olmalıdır ve sıfırla başlamamalıdır.";
+        }
+        if (!/^\d{11}$/.test(formData.tc)) {
+            newErrors.tc = "T.C. Kimlik No 11 haneli olmalıdır.";
+        }
+        if (!formData.length.trim()) {
+            newErrors.length = "Boy boş olamaz.";
+        } else if (!/^\d+$/.test(formData.length)) {
+            newErrors.length = "Boy yalnızca sayı olmalıdır.";
+        }
+        
+        if (!formData.weight.trim()) {
+            newErrors.weight = "Kilo boş olamaz.";
+        } else if (!/^\d+$/.test(formData.weight)) {
+            newErrors.weight = "Kilo yalnızca sayı olmalıdır.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form Data:', formData); // Log the form data
+        if (!validateForm()) {
+            return;
+        }
         try {
             await signUpdateUser(formData);
             alert("Güncelleme başarılı");
-            setProfileData(formData); // Update the profile data with the new information
+            setUser(formData); // This will update the context and local storage
             setIsModalOpen(false); // Close the modal
         } catch (error) {
             console.error('Update error:', error.message);
@@ -66,14 +89,14 @@ function Profile() {
                         <div className="flex items-center gap-6">
                             <Avatar
                                 src={profileData.foto || "default-avatar.jpg"}
-                                alt={`${profileData.name || "İsim"} ${profileData.surname || "Soyisim"}`}
+                                alt={`${formData.name || "İsim"} ${formData.surname || "Soyisim"}`}
                                 size="xl"
                                 variant="rounded"
                                 className="rounded-lg shadow-lg shadow-blue-gray-500/40"
                             />
                             <div>
                                 <Typography variant="h6" color="blue-gray" className="mb-3">
-                                    {`${profileData.name || "İsim"} ${profileData.surname || "Soyisim"}`}
+                                    {`${formData.name || "İsim"} ${formData.surname || "Soyisim"}`}
                                 </Typography>
                                 <Typography variant="h6" color="blue-gray" className="mb-3">
                                     {`${profileData.unvan || "Ünvan"}`}
@@ -150,6 +173,7 @@ function Profile() {
                                 className="w-full p-2 mt-2 border rounded"
                                 placeholder="Telefon"
                             />
+                            {errors.phone && <p className="text-red-500">{errors.phone}</p>}
                             <input
                                 type="text"
                                 name="tc"
@@ -158,6 +182,7 @@ function Profile() {
                                 className="w-full p-2 mt-2 border rounded"
                                 placeholder="T.C. Kimlik No"
                             />
+                            {errors.tc && <p className="text-red-500">{errors.tc}</p>}
                             <input
                                 type="date"
                                 name="date"
@@ -174,6 +199,7 @@ function Profile() {
                                 className="w-full p-2 mt-2 border rounded"
                                 placeholder="Boy"
                             />
+                            {errors.length && <p className="text-red-500">{errors.length}</p>}
                             <input
                                 type="text"
                                 name="weight"
@@ -182,22 +208,39 @@ function Profile() {
                                 className="w-full p-2 mt-2 border rounded"
                                 placeholder="Kilo"
                             />
-                            <input
-                                type="text"
+                            {errors.weight && <p className="text-red-500">{errors.weight}</p>}
+                            <select
                                 name="blood"
                                 value={formData.blood || ''}
                                 onChange={handleInputChange}
                                 className="w-full p-2 mt-2 border rounded"
-                                placeholder="Kan Grubu"
-                            />
+                            >
+                                <option value="" disabled>Kan Grubu</option>
+                                <option value="A Rh+">A Rh+ (A pozitif)</option>
+                                <option value="A Rh-">A Rh- (A negatif)</option>
+                                <option value="B Rh+">B Rh+ (B pozitif)</option>
+                                <option value="B Rh-">B Rh- (B negatif)</option>
+                                <option value="AB Rh+">AB Rh+ (AB pozitif)</option>
+                                <option value="AB Rh-">AB Rh- (AB negatif)</option>
+                                <option value="O Rh+">O Rh+ (O pozitif)</option>
+                                <option value="O Rh-">O Rh- (O negatif)</option>
+                            </select>
                         </div>
                         <div className="mt-4">
-                            <Button color="red" onClick={handleFormSubmit} className="mr-2">
+                            <button
+                                type="button"
+                                className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-white "
+                                onClick={handleFormSubmit}
+                            >
                                 Kaydet
-                            </Button>
-                            <Button color="red" onClick={() => setIsModalOpen(false)}>
+                            </button>
+                            <button
+                                type="button"
+                                className="ml-2 inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                onClick={() => setIsModalOpen(false)}
+                            >
                                 İptal
-                            </Button>
+                            </button>
                         </div>
                     </Dialog.Panel>
                 </div>

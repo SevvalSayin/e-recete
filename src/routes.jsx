@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUserCircle, faStethoscope, faCapsules, faHospital, faSyringe,  faUserPlus,faVials,faCircleRadiation } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUserCircle, faStethoscope, faCapsules, faHospital, faSyringe, faUserPlus, faVials, faCircleRadiation } from '@fortawesome/free-solid-svg-icons';
 
 import { Home, Profile } from "@/pages/dashboard";
-import { SignIn, SignUp, SignUpdate } from "@/pages/auth";
+import { SignIn, SignUp } from "@/pages/auth";
 import Results from "@/pages/dashboard/Results";
 import Assay from "@/pages/dashboard/Assay";
 import Radiological from "@/pages/dashboard/Radiological";
@@ -67,7 +67,6 @@ export const routes = [
     ],
   },
   {
-    /* title: "auth pages", */
     layout: "auth",
     pages: [
       {
@@ -82,15 +81,8 @@ export const routes = [
         path: "/sign-up",
         element: <SignUp />,
       },
-     /*  {
-        icon: <FontAwesomeIcon icon={faUserPlus} {...icon} />,
-        name: "Şifre Güncelle",
-        path: "/sign-update",
-        element: <SignUpdate />, 
-      }, */
     ],
   },
 ];
 
 export default routes;
-

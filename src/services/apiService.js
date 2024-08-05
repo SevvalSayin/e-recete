@@ -80,17 +80,23 @@ export const signInUser = async ({ tc, sifre }) => {
   return result;
 };
 
-export const signUpdateUser = async ({name, surname, tc, email, phone, date, length, weight, blood}) => {
-  const document = { name, surname, tc, email, phone, date, length, weight, blood };
-  
+export const signUpdateUser = async ({ name, surname, tc, email, phone, date, length, weight, blood }) => {
+  const filter = { tc }; // Assuming `tc` is the unique identifier for the user
+  const update = { $set: { name, surname, email, phone, date, length, weight, blood } };
+
   try {
-    console.log('Updating user with data:', document);
-    
-    const response = await insertDocument(document); 
-    console.log('Update response:', response);
-    return response;
+      console.log('Updating user with data:', update);
+      const response = await axiosInstance.post('/action/updateOne', {
+          collection: 'kayıt',
+          database: 'deneme',
+          dataSource: 'e-recete',
+          filter,
+          update
+      });
+      console.log('Update response:', response);
+      return response.data;
   } catch (error) {
-    console.error('Update error:', error.message);
-    throw new Error('Failed to update user information.');
+      console.error('Update error:', error.message);
+      throw new Error('Failed to update user information.');
   }
 };
