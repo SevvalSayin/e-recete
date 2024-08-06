@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Typography, Input, IconButton, Button } from "@material-tailwind/react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { useUser } from '@/context/UserContext';
-import Sidenav from '@/widgets/layout/sidenav'; // Sidenav bileşenini içe aktarın
+import Sidenav from '@/widgets/layout/sidenav';
 import routes from "@/routes";
 
 export function DashboardNavbar() {
@@ -13,7 +13,7 @@ export function DashboardNavbar() {
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [isSideNavOpen, setIsSideNavOpen] = useState(false); // SideNav state
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
 
   const handleLogout = () => {
     setUser(null);
@@ -22,28 +22,29 @@ export function DashboardNavbar() {
   };
 
   const handleSearchChange = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
+    setSearchQuery(event.target.value);
+  };
 
-    if (query.length >= 2) {
-      fetchSearchResults(query);
+  const handleSearch = async () => {
+    if (searchQuery.length >= 2) {
+      try {
+        const response = await fetch(`/api/search?query=${searchQuery}`);
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error('Arama sonuçları getirilirken hata oluştu:', error);
+      }
     } else {
       setSearchResults([]);
     }
   };
 
-  const fetchSearchResults = async (query) => {
-    try {
-      const response = await fetch(`/api/search?query=${query}`);
-      const data = await response.json();
-      setSearchResults(data);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
+  const toggleSideNav = () => {
+    setIsSideNavOpen(!isSideNavOpen);
   };
 
-  const toggleSideNav = () => {
-    setIsSideNavOpen(!isSideNavOpen); // Toggle SideNav state
+  const handleCloseSidenav = () => {
+    setIsSideNavOpen(false);
   };
 
   return (
@@ -59,7 +60,7 @@ export function DashboardNavbar() {
               variant="text"
               color="blue-gray"
               className="xl:hidden"
-              onClick={toggleSideNav} // Add onClick handler
+              onClick={toggleSideNav}
             >
               <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
             </IconButton>
@@ -67,12 +68,21 @@ export function DashboardNavbar() {
           <div className="flex-grow flex justify-center">
             <div className="relative w-full max-w-md">
               <Input
-                label="Search"
+                label="Arama"
                 className="w-full"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 style={{ width: '100%' }}
               />
+              <Button
+                variant="gradient"
+                color="blue"
+                size="sm"
+                onClick={handleSearch}
+                className="absolute right-0 top-0 h-full"
+              >
+                Ara
+              </Button>
               {searchQuery.length >= 2 && (
                 <div className="absolute bg-white shadow-lg rounded-md mt-1 w-full max-h-60 overflow-y-auto z-10">
                   {searchResults.map((result, index) => (
@@ -104,11 +114,17 @@ export function DashboardNavbar() {
         </div>
       </Navbar>
 
-      {/* Sidenav component */}
+      {isSideNavOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={handleCloseSidenav}
+        ></div>
+      )}
+
       <Sidenav
         brandImg="/path/to/your/prescription-logo.png"
         brandName="e-Reçete/Kişisel Sağlık Sistemi"
-        routes={routes} // Add your routes here
+        routes={routes}
         open={isSideNavOpen}
         onClose={toggleSideNav}
       />

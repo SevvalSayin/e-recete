@@ -1,15 +1,11 @@
 import PropTypes from "prop-types";
 import { Link, NavLink } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  Button,
-  IconButton,
-  Typography,
-} from "@material-tailwind/react";
-import { useMaterialTailwindController, setOpenSidenav } from "@/context";
+import { Button, IconButton, Typography } from "@material-tailwind/react";
+import { useMaterialTailwindController } from "@/context";
 
 export function Sidenav({ brandImg, brandName, routes, open, onClose }) {
-  const [controller, dispatch] = useMaterialTailwindController();
+  const [controller] = useMaterialTailwindController();
   const { sidenavColor, sidenavType } = controller;
 
   const sidenavTypes = {
@@ -26,11 +22,7 @@ export function Sidenav({ brandImg, brandName, routes, open, onClose }) {
     >
       <div className="relative">
         <Link to="/" className="py-6 px-8 text-center flex items-center justify-center gap-2">
-         {/*  <img src={brandImg} alt="Brand Logo" className="h-8 w-8" /> */}
-          <Typography
-            variant="h6"
-            color="red"
-          >
+          <Typography variant="h6" color="red">
             {brandName}
           </Typography>
         </Link>
@@ -39,8 +31,8 @@ export function Sidenav({ brandImg, brandName, routes, open, onClose }) {
           color="white"
           size="sm"
           ripple={false}
-          className="absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
-          onClick={onClose}  // Close sidenav on click
+          className="absolute left-0 top-0 mt-4 ml-4 xl:hidden"
+          onClick={onClose}
         >
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5 text-white" />
         </IconButton>
@@ -95,16 +87,16 @@ export function Sidenav({ brandImg, brandName, routes, open, onClose }) {
 }
 
 Sidenav.defaultProps = {
-  brandImg: "/path/to/your/prescription-logo.png", 
-  brandName: "e-Reçete/Kişisel Sağlık Sistemi",
+  brandImg: "/path/to/your/prescription-logo.png",
+  brandName: "e-Prescription/Personal Health System",
 };
 
 Sidenav.propTypes = {
   brandImg: PropTypes.string,
   brandName: PropTypes.string,
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  open: PropTypes.bool.isRequired,  // Add open prop type
-  onClose: PropTypes.func.isRequired,  // Add onClose prop type
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 Sidenav.displayName = "/src/widgets/layout/sidenav.jsx";
