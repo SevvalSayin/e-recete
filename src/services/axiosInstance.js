@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// `axiosInstance`'ı yalnızca bir kez tanımlayın ve export edin
 const axiosInstance = axios.create({
   baseURL: '/api',
   headers: {
