@@ -3,6 +3,12 @@ import serveStatic from 'serve-static';
 import path from 'path';
 import cors from 'cors';
 import axios from 'axios';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Set up __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -15,30 +21,33 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use('/api', async (req, res) => {
-  const url = `https://new-mongodb-api-url.com/endpoint${req.url}`;
-  const options = {
-    url,
-    headers: {
-      'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'
-    },
-    method: req.method,
-    data: req.body
-  };
+// Create an axios instance
+const apiClient = axios.create({
+  baseURL: 'https://new-mongodb-api-url.com/endpoint',
+  headers: {
+    'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'
+  }
+});
 
+// Proxy API requests
+app.use('/api', async (req, res) => {
   try {
-    const response = await axios(options);
+    const response = await apiClient({
+      method: req.method,
+      url: req.url,
+      data: req.body
+    });
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error('Error in MongoDB API Proxy:', error.message);
+    console.error('Error in MongoDB API Proxy:', error.response?.data || error.message);
     res.status(500).send('Internal Server Error');
   }
 });
 
+// InsertMany endpoint
 app.post('/api/action/insertMany', async (req, res) => {
   const { documents } = req.body;
 
-  // Adjust mapping if necessary
   const alanEşleştirme = {
     __EMPTY: 'İlaç Adı',
     __EMPTY_1: 'Barkod',
@@ -73,19 +82,16 @@ app.post('/api/action/insertMany', async (req, res) => {
   };
 
   try {
-    const response = await axios.post('https://new-mongodb-api-url.com/endpoint/data/v1/action/insertMany', data, {
-      headers: {
-        'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'
-      }
-    });
+    const response = await apiClient.post('/data/v1/action/insertMany', data);
     console.log('Toplu ekleme başarılı:', response.data);
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error('Toplu ekleme başarısız:', error.message);
+    console.error('Toplu ekleme başarısız:', error.response?.data || error.message);
     res.status(500).send('MongoDB\'ye veri ekleme başarısız oldu.');
   }
 });
 
+// Serve static files
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
