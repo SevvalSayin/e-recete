@@ -1,14 +1,14 @@
-const express = require('express');
-const serveStatic = require('serve-static');
-const path = require('path');
-const cors = require('cors');
-const axios = require('axios');
-const { fileURLToPath } = require('url');
-const { dirname } = require('path');
+import express from 'express';
+import serveStatic from 'serve-static';
+import path from 'path';
+import cors from 'cors';
+import axios from 'axios';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-// Set up __dirname for CommonJS
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 
 const app = express();
 app.use(express.json());
