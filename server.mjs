@@ -5,50 +5,60 @@ import cors from 'cors';
 import axios from 'axios';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { ObjectId } from 'mongodb';  // Assuming you're using this for MongoDB ObjectId
 
+// Set __dirname and __filename for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
+// Initialize Express
 const app = express();
-app.use(express.json());
+app.use(express.json());  // Parse incoming JSON requests
 
+// CORS setup to allow requests from your React frontend
 const corsOptions = {
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'api-key', 'Accept']
+  origin: '*',  // Frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'api-key', 'Accept']  // Allowed headers
 };
-
 app.use(cors(corsOptions));
 
-// Create an axios instance
+// Create an axios instance to communicate with MongoDB API
 const apiClient = axios.create({
-  baseURL: 'https://new-mongodb-api-url.com/endpoint',
+  baseURL: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nauitwn/endpoint/data/v1',  // MongoDB API URL
   headers: {
-    'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'
+    'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'  // API Key
   }
 });
 
-// Proxy API requests
+// Proxy any API requests to the MongoDB Data API
 app.use('/api', async (req, res) => {
   try {
     const response = await apiClient({
       method: req.method,
       url: req.url,
-      data: req.body
+      data: req.body,
     });
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error('Error in MongoDB API Proxy:', error.response?.data || error.message);
-    res.status(500).send('Internal Server Error');
+    console.error('Error in MongoDB API Proxy:', error.message);
+    if (error.response) {
+      res.status(error.response.status).json(error.response.data);
+    } else if (error.request) {
+      res.status(500).json({ message: 'No response received from MongoDB API' });
+    } else {
+      res.status(500).json({ message: 'Error setting up request to MongoDB API' });
+    }
   }
 });
 
-// InsertMany endpoint
+// Insert Many API route
 app.post('/api/action/insertMany', async (req, res) => {
+  console.log('Received data for InsertMany:', req.body);
   const { documents } = req.body;
 
-  const alanEşleştirme = {
+  // Field mapping for document keys
+  const fieldMapping = {
     __EMPTY: 'İlaç Adı',
     __EMPTY_1: 'Barkod',
     __EMPTY_2: 'ATC Kodu',
@@ -58,18 +68,17 @@ app.post('/api/action/insertMany', async (req, res) => {
     __EMPTY_6: 'Durum'
   };
 
-  const eşlenmişDokümanlar = documents.map(doc => {
-    const eşlenmişDoc = {};
-
-    Object.keys(alanEşleştirme).forEach((key) => {
-      if (doc[key] !== undefined) {
-        eşlenmişDoc[alanEşleştirme[key]] = doc[key];
+  // Map incoming documents using fieldMapping
+  const mappedDocuments = documents.map(doc => {
+    const mappedDoc = {};
+    Object.keys(fieldMapping).forEach((key) => {
+      if (doc[key]) {  // Only map existing keys
+        mappedDoc[fieldMapping[key]] = doc[key];
       }
     });
-
     return {
-      ...eşlenmişDoc,
-      _id: doc._id,
+      ...mappedDoc,
+      _id: doc._id || new ObjectId(),  // Generate _id if missing
       __rowNum__: doc.__rowNum__
     };
   });
@@ -78,26 +87,28 @@ app.post('/api/action/insertMany', async (req, res) => {
     collection: 'kayıt',
     database: 'deneme',
     dataSource: 'e-recete',
-    documents: eşlenmişDokümanlar,
+    documents: mappedDocuments,
   };
 
   try {
-    const response = await apiClient.post('/data/v1/action/insertMany', data);
-    console.log('Toplu ekleme başarılı:', response.data);
+    const response = await apiClient.post('/action/insertMany', data);
+    console.log('InsertMany success:', response.data);
     res.status(response.status).json(response.data);
   } catch (error) {
-    console.error('Toplu ekleme başarısız:', error.response?.data || error.message);
-    res.status(500).send('MongoDB\'ye veri ekleme başarısız oldu.');
+    console.error('InsertMany failed:', error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { message: 'Internal Server Error' });
   }
 });
 
-// Serve static files
+// Serve static files from the 'dist' directory (for the React frontend)
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
+// Serve the frontend (React app) for any unknown routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
+// Start the server on port 3005 or the port specified in environment variables
 const port = process.env.PORT || 3005;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
