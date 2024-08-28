@@ -1,12 +1,11 @@
 import express from 'express';
-import serveStatic from 'serve-static';
+import multer from 'multer';
+import * as XLSX from 'xlsx';
 import path from 'path';
-import cors from 'cors';
-import axios from 'axios';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { ObjectId } from 'mongodb'; // Assuming you're using this for MongoDB ObjectId
-
+import axios from 'axios';
+import cors from 'cors';
 
 // Set __dirname and __filename for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -24,11 +23,76 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
+
 // Create an axios instance to communicate with MongoDB API
 const apiClient = axios.create({
-  baseURL: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nauitwn/endpoint/data/v1',  // MongoDB API URL
+  baseURL: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nauitwn/endpoint/data/v1',
   headers: {
-    'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'  // API Key
+    'api-key': 'Rvc6CNklg8YuyDRi014MSZennyqBH5Xib8yhWMSDJ4kk42HOnozkB0T5IVw1C9TG'
+  }
+});
+
+// Field mappings
+const atcFieldMapping = {
+  __EMPTY: 'İlaç Adı',
+  __EMPTY_1: 'Barkod',
+  __EMPTY_2: 'ATC Kodu',
+  __EMPTY_3: 'ATC Adı',
+  __EMPTY_4: 'Firma Adı',
+  __EMPTY_5: 'Reçete Türü',
+  __EMPTY_6: 'Durum'
+};
+
+const icdFieldMapping = {
+  'Adı': 'Name',
+  'Kodu': 'Code',
+  'Üst Kodu': 'Upper Code',
+  'Seviye': 'Level',
+  'Yüksek Riskli Gebelik': 'High Risk'
+};
+
+// Helper function to read Excel file and map fields
+async function readExcelFile(filePath, fieldMapping) {
+  const workbook = XLSX.readFile(filePath);
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const data = XLSX.utils.sheet_to_json(worksheet);
+
+  return data.map(row => {
+    const newRow = {};
+    let isEmpty = true; // Track if row is empty
+    Object.keys(row).forEach(key => {
+      const mappedKey = fieldMapping[key];
+      if (mappedKey && row[key] !== undefined && row[key] !== null && row[key] !== '') {
+        newRow[mappedKey] = row[key];
+        isEmpty = false; // Set to false if any valid data is found
+      }
+    });
+    return isEmpty ? null : newRow; // Only return rows that have mapped data
+  }).filter(row => row !== null); // Remove empty rows
+}
+
+// Upload and process Excel file
+app.post('/api/upload', upload.single('file'), async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'uploads', req.file.filename);
+    const fieldMapping = req.body.isAtc ? atcFieldMapping : icdFieldMapping;
+    const documents = await readExcelFile(filePath, fieldMapping);
+
+    const data = {
+      collection: 'kayıt',
+      database: 'deneme',
+      dataSource: 'e-recete',
+      documents: documents,
+    };
+
+    const response = await apiClient.post('/action/insertMany', data);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error('Error in API request:', error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { message: 'Internal Server Error' });
   }
 });
 
@@ -50,54 +114,6 @@ app.use('/api', async (req, res) => {
     } else {
       res.status(500).json({ message: 'Error setting up request to MongoDB API' });
     }
-  }
-});
-
-// Insert Many API route
-app.post('/api/action/insertMany', async (req, res) => {
-  console.log('Received data for InsertMany:', req.body);
-  const { documents } = req.body;
-
-  // Field mapping for document keys
-  const fieldMapping = {
-    __EMPTY: 'İlaç Adı',
-    __EMPTY_1: 'Barkod',
-    __EMPTY_2: 'ATC Kodu',
-    __EMPTY_3: 'ATC Adı',
-    __EMPTY_4: 'Firma Adı',
-    __EMPTY_5: 'Reçete Türü',
-    __EMPTY_6: 'Durum'
-  };
-
-  // Map incoming documents using fieldMapping
-  const mappedDocuments = documents.map(doc => {
-    const mappedDoc = {};
-    Object.keys(fieldMapping).forEach((key) => {
-      if (doc[key]) {  // Only map existing keys
-        mappedDoc[fieldMapping[key]] = doc[key];
-      }
-    });
-    return {
-      ...mappedDoc,
-      _id: doc._id || new ObjectId(),  // Generate _id if missing
-      __rowNum__: doc.__rowNum__
-    };
-  });
-
-  const data = {
-    collection: 'kayıt',
-    database: 'deneme',
-    dataSource: 'e-recete',
-    documents: mappedDocuments,
-  };
-
-  try {
-    const response = await apiClient.post('/action/insertMany', data);
-    console.log('InsertMany success:', response.data);
-    res.status(response.status).json(response.data);
-  } catch (error) {
-    console.error('InsertMany failed:', error.message);
-    res.status(error.response?.status || 500).json(error.response?.data || { message: 'Internal Server Error' });
   }
 });
 
