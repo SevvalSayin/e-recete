@@ -84,7 +84,7 @@ function Assay() {
   };
 
   const handleICDClick = () => {
-    fetchAndProcessFile('/data/icd.xlsx'); // Ensure correct path
+    fetchAndProcessFile('/data/ıcd.xlsx'); // Ensure correct path
   };
 
   return (
