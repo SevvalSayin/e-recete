@@ -102,7 +102,9 @@ app.post('/api/action/insertMany', async (req, res) => {
 });
 
 // Serve static files from the 'dist' directory (for the React frontend)
-app.use(serveStatic(path.join(__dirname, 'dist')));
+// Statik dosya sunmak için 'data' klasörünü tanımla
+app.use('/data', express.static(path.join(__dirname, 'data')));
+
 
 // Serve the frontend (React app) for any unknown routes
 app.get('*', (req, res) => {
