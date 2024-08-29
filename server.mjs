@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
 
 // Initialize Express
 const app = express();
-app.use(express.json());  // Parse incoming JSON requests
+app.use(express.json());
 
 // CORS setup to allow requests from your React frontend
 const corsOptions = {
@@ -34,7 +34,7 @@ const apiClient = axios.create({
   }
 });
 
-// Field mappings
+// Field mappings for different files
 const atcFieldMapping = {
   __EMPTY: 'İlaç Adı',
   __EMPTY_1: 'Barkod',
@@ -53,6 +53,16 @@ const icdFieldMapping = {
   'Yüksek Riskli Gebelik': 'High Risk'
 };
 
+const loincFieldMapping = {
+  'LOINC_NUM': 'Code',
+  'LONG_COMMON_NAME': 'Name',
+  'COMPONENT': 'Component',
+  'PROPERTY': 'Property',
+  'TIME_ASPCT': 'Time Aspect',
+  'SYSTEM': 'System',
+  'SCALE_TYP': 'Scale Type',
+};
+
 // Helper function to read Excel file and map fields
 async function readExcelFile(filePath, fieldMapping) {
   const workbook = XLSX.readFile(filePath);
@@ -62,23 +72,34 @@ async function readExcelFile(filePath, fieldMapping) {
 
   return data.map(row => {
     const newRow = {};
-    let isEmpty = true; // Track if row is empty
+    let isEmpty = true;
     Object.keys(row).forEach(key => {
       const mappedKey = fieldMapping[key];
       if (mappedKey && row[key] !== undefined && row[key] !== null && row[key] !== '') {
         newRow[mappedKey] = row[key];
-        isEmpty = false; // Set to false if any valid data is found
+        isEmpty = false;
       }
     });
-    return isEmpty ? null : newRow; // Only return rows that have mapped data
-  }).filter(row => row !== null); // Remove empty rows
+    return isEmpty ? null : newRow;
+  }).filter(row => row !== null);
 }
+
 
 // Upload and process Excel file
 app.post('/api/upload', upload.single('file'), async (req, res) => {
   try {
     const filePath = path.join(__dirname, 'uploads', req.file.filename);
-    const fieldMapping = req.body.isAtc ? atcFieldMapping : icdFieldMapping;
+    let fieldMapping;
+    if (req.body.isAtc) {
+      fieldMapping = atcFieldMapping;
+    } else if (req.body.isIcd) {
+      fieldMapping = icdFieldMapping;
+    } else if (req.body.isLoinc) {
+      fieldMapping = loincFieldMapping;
+    } else {
+      throw new Error('Invalid file type specified');
+    }
+
     const documents = await readExcelFile(filePath, fieldMapping);
 
     const data = {

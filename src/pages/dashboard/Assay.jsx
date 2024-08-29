@@ -3,7 +3,7 @@ import { Button } from '@material-tailwind/react';
 import * as XLSX from 'xlsx';
 import { insertManyDocuments, sendRawDataToApiService } from '@/services/apiService';
 
-// Field mapping for ATC and ICD
+// Field mapping for ATC, ICD, and LOINC
 const atcFieldMapping = {
   __EMPTY: 'Drug Name',
   __EMPTY_1: 'Barcode',
@@ -22,6 +22,17 @@ const icdFieldMapping = {
   'Yüksek Riskli Gebelik': 'High Risk'
 };
 
+const loincFieldMapping = {
+  'LOINC_NUM': 'Code',
+  'LONG_COMMON_NAME': 'Name',
+  'COMPONENT': 'Component',
+  'PROPERTY': 'Property',
+  'TIME_ASPCT': 'Time Aspect',
+  'SYSTEM': 'System',
+  'SCALE_TYP': 'Scale Type',
+};
+
+
 // Field mapping function
 function mapFields(data, fieldMapping) {
   return data.map(row => {
@@ -39,7 +50,7 @@ function mapFields(data, fieldMapping) {
 }
 
 // Function to fetch and process Excel file
-async function fetchAndProcessFile(fileUrl, isAtc = false) {
+async function fetchAndProcessFile(fileUrl, fieldMapping) {
   try {
     console.log('Fetching file from URL:', fileUrl);
     const response = await fetch(fileUrl);
@@ -60,16 +71,12 @@ async function fetchAndProcessFile(fileUrl, isAtc = false) {
       return;
     }
 
-    // Map the data using appropriate field mapping (ATC or ICD)
-    const mappedData = isAtc ? mapFields(data, atcFieldMapping) : mapFields(data, icdFieldMapping);
+    // Map the data using appropriate field mapping
+    const mappedData = mapFields(data, fieldMapping);
     
     if (Array.isArray(mappedData) && mappedData.length > 0) {
       console.log('Mapped Data:', mappedData);
-      if (isAtc) {
-        await insertManyDocuments(mappedData);
-      } else {
-        await sendRawDataToApiService(mappedData);
-      }
+      await sendRawDataToApiService(mappedData);
     } else {
       console.error('Mapped data is empty or invalid:', mappedData);
     }
@@ -80,11 +87,15 @@ async function fetchAndProcessFile(fileUrl, isAtc = false) {
 
 function Assay() {
   const handleATCClick = () => {
-    fetchAndProcessFile('/data/atc.xlsx', true); // Ensure correct path
+    fetchAndProcessFile('/data/atc.xlsx', atcFieldMapping);
   };
 
   const handleICDClick = () => {
-    fetchAndProcessFile('/data/ıcd.xlsx'); // Ensure correct path
+    fetchAndProcessFile('/data/ıcd.xlsx', icdFieldMapping);
+  };
+
+  const handleLoincClick = () => {
+    fetchAndProcessFile('/data/loinc.xlsx', loincFieldMapping); // Ensure correct path
   };
 
   return (
@@ -92,6 +103,8 @@ function Assay() {
       <Button color='red' onClick={handleATCClick}>ATC Excel</Button>
       <hr />
       <Button color='red' onClick={handleICDClick}>ICD Excel</Button>
+      <hr />
+      <Button color='red' onClick={handleLoincClick}>LOINC Excel</Button> {/* New button */}
     </div>
   );
 }
